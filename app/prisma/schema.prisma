@@ -1,0 +1,72 @@
+// Generate Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Database configuration (adjust provider to your DB)
+datasource db {
+  provider = "postgresql" // or "mysql" | "sqlite" | "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Team {
+  id         Int     @id @default(autoincrement())
+  name       String
+  slug       String  @unique
+  country    String?
+  sourceRef  String?
+
+  homeGames  Match[] @relation("HomeTeam")
+  awayGames  Match[] @relation("AwayTeam")
+
+  @@index([country])
+}
+
+model Match {
+  id            Int      @id @default(autoincrement())
+  extId         String?  @unique
+  homeTeamId    Int
+  awayTeamId    Int
+  competitionId Int
+  matchDate     DateTime
+  title         String?
+  status        String   @default("FINISHED")
+
+  homeTeam      Team       @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam      Team       @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  videos        Video[]
+
+  @@unique([homeTeamId, awayTeamId, matchDate])
+  @@index([matchDate])
+  @@index([competitionId])
+}
+
+model Video {
+  id          Int      @id @default(autoincrement())
+  matchId     Int
+  title       String
+  thumbnailUrl String?
+  embedHtml   String
+  sourceUrl   String
+  provider    String?
+  publishedAt DateTime
+  fetchedAt   DateTime @default(now())
+  isActive    Boolean  @default(true)
+  checksum    Bytes?
+
+  match       Match    @relation(fields: [matchId], references: [id])
+
+  @@index([publishedAt])
+}
+
+model Competition {
+  id       Int      @id @default(autoincrement())
+  name     String
+  slug     String   @unique
+  country  String?
+  matches  Match[]
+  
+  // Example: enforcing unique competitions by name+country
+  @@unique([name, country])
+}

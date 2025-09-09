@@ -1,0 +1,36 @@
+services:
+  goalkicklive-db:
+    image: postgres:15
+    container_name: goalkicklive-db
+    restart: always
+    ports:
+      - "5433:5432"  # Host 5433 -> Container 5432
+    environment:
+      POSTGRES_USER: goalkick
+      POSTGRES_PASSWORD: goalkickpass
+      POSTGRES_DB: goalkicklive_dev
+    volumes:
+      - goalkicklive_data:/var/lib/postgresql/data
+
+  goalkicklive-redis:
+    image: redis:7
+    container_name: goalkicklive-redis
+    restart: always
+    ports:
+      - "6379:6379"  # Host 6379 -> Container 6379
+    command: ["redis-server", "--appendonly", "yes"] # enable persistence
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: goalkicklive-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dev@goalkicklive.com
+      PGADMIN_DEFAULT_PASSWORD: dev@pass123!
+    ports:
+      - "5050:80"
+    depends_on:
+      - goalkicklive-db
+
+volumes:
+  goalkicklive_data:
