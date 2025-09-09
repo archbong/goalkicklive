@@ -112,6 +112,12 @@ project-root/
 
 - Icon Component (centralized icons)
 
+- HighlightsFilter - Advanced filtering with competition, team, and date filters
+
+- HighlightsGrid - Responsive grid layout with loading states and error handling
+
+- EnhancedVideoPlayer - Custom video player with keyboard shortcuts and accessibility
+
 **Forms & Inputs**
 
 - Text Field
@@ -140,13 +146,38 @@ project-root/
 
 **Video Components**
 
-- VideoPlayer.tsx – Embed highlights/live streams.
+- VideoPlayer.tsx – Basic video embed component
+- EnhancedVideoPlayer.tsx – Advanced video player with custom controls, keyboard shortcuts, loading states, and accessibility features
 
 **Ads Components**
 
 - AdSlot.tsx – Google Ad Manager or custom ads integration.
 
 **Analytics Components**
+
+---
+
+## **⚽ Highlights Feature**
+
+The platform includes a comprehensive highlights system with:
+
+### **Core Features**
+- **Match Highlights Browsing**: Paginated grid display with loading states
+- **Advanced Filtering**: Filter by competition, team, and date ranges
+- **Enhanced Video Playback**: Custom video player with full controls
+- **Responsive Design**: Mobile-first responsive interface
+- **Performance Optimization**: Lazy loading, caching, and bundle optimization
+
+### **API Endpoints**
+- `GET /api/highlights` - Fetch highlights with filtering and pagination
+- `GET /api/highlights/filters` - Get available filter options (competitions, teams, date ranges)
+
+### **Technical Implementation**
+- Built with Next.js 15 Server Components and React Cache
+- Prisma ORM with PostgreSQL database integration
+- Redis caching for high-performance data access
+- Zod validation for API endpoints
+- TypeScript throughout for type safety
 
 - AnalyticsTracker.tsx – Custom tracking for clicks, video plays, etc.
 

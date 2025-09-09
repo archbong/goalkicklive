@@ -18,9 +18,10 @@ export interface UnifiedHighlight {
     away: number;
   };
   matchDate: Date;
+  date?: string;
   views: number;
   likes: number;
-  provider: 'supersport' | 'scorebat';
+  provider: "supersport" | "scorebat";
   providerId: string;
   metadata: {
     quality: string;
@@ -36,7 +37,7 @@ export interface HighlightFilters {
   date?: string;
   page?: number;
   pageSize?: number;
-  provider?: 'all' | 'supersport' | 'scorebat';
+  provider?: "all" | "supersport" | "scorebat";
 }
 
 export interface HighlightsResponse {
@@ -52,8 +53,16 @@ export interface HighlightsResponse {
 }
 
 export interface FilterOptions {
-  competitions: string[];
-  teams: string[];
+  competitions: Array<{
+    value: string;
+    label: string;
+    country: string | null;
+  }>;
+  teams: Array<{
+    value: string;
+    label: string;
+    country: string | null;
+  }>;
   dateRange: {
     min: Date;
     max: Date;

@@ -1,42 +1,79 @@
 // lib/validators/highlight-validator.ts
-import { z } from 'zod';
+import { z, ZodError } from "zod";
 
 // Validation schema for highlight query parameters
 export const highlightQuerySchema = z.object({
   competition: z.string().optional(),
+  competitions: z
+    .string()
+    .optional()
+    .transform((val) => (val ? val.split(",") : undefined)),
   team: z.string().optional(),
-  date: z.string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
+  teams: z
+    .string()
+    .optional()
+    .transform((val) => (val ? val.split(",") : undefined)),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format")
     .optional(),
-  page: z.coerce.number()
-    .int('Page must be an integer')
-    .positive('Page must be positive')
+  dateFrom: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "DateFrom must be in YYYY-MM-DD format")
+    .optional(),
+  dateTo: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "DateTo must be in YYYY-MM-DD format")
+    .optional(),
+  search: z.string().optional(),
+  page: z.coerce
+    .number()
+    .int("Page must be an integer")
+    .positive("Page must be positive")
     .default(1),
-  pageSize: z.coerce.number()
-    .int('Page size must be an integer')
-    .min(1, 'Page size must be at least 1')
-    .max(100, 'Page size cannot exceed 100')
+  pageSize: z.coerce
+    .number()
+    .int("Page size must be an integer")
+    .min(1, "Page size must be at least 1")
+    .max(100, "Page size cannot exceed 100")
     .default(20),
-  provider: z.enum(['all', 'supersport', 'scorebat'])
-    .default('all'),
+  provider: z.enum(["all", "supersport", "scorebat"]).default("all"),
 });
 
 // Validation schema for highlight ID parameter
 export const highlightIdSchema = z.object({
-  id: z.string()
-    .min(1, 'Highlight ID is required')
-    .regex(/^[a-zA-Z0-9_-]+$/, 'Invalid highlight ID format'),
+  id: z
+    .string()
+    .min(1, "Highlight ID is required")
+    .regex(/^[a-zA-Z0-9_-]+$/, "Invalid highlight ID format"),
 });
 
 // Validation schema for filter options
 export const filterOptionsSchema = z.object({
   competition: z.string().optional(),
+  competitions: z
+    .string()
+    .optional()
+    .transform((val) => (val ? val.split(",") : undefined)),
   team: z.string().optional(),
-  date: z.string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
+  teams: z
+    .string()
+    .optional()
+    .transform((val) => (val ? val.split(",") : undefined)),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format")
     .optional(),
-  provider: z.enum(['all', 'supersport', 'scorebat'])
-    .default('all'),
+  dateFrom: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "DateFrom must be in YYYY-MM-DD format")
+    .optional(),
+  dateTo: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "DateTo must be in YYYY-MM-DD format")
+    .optional(),
+  search: z.string().optional(),
+  provider: z.enum(["all", "supersport", "scorebat"]).default("all"),
 });
 
 // Type inference from schemas
@@ -45,16 +82,20 @@ export type HighlightIdParams = z.infer<typeof highlightIdSchema>;
 export type FilterOptions = z.infer<typeof filterOptionsSchema>;
 
 // Validation functions
-export function validateHighlightQuery(searchParams: URLSearchParams): HighlightQuery {
+export function validateHighlightQuery(
+  searchParams: URLSearchParams,
+): HighlightQuery {
   const params = Object.fromEntries(searchParams);
   return highlightQuerySchema.parse(params);
 }
 
-export function validateHighlightId(params: any): HighlightIdParams {
+export function validateHighlightId(params: unknown): HighlightIdParams {
   return highlightIdSchema.parse(params);
 }
 
-export function validateFilterOptions(searchParams: URLSearchParams): FilterOptions {
+export function validateFilterOptions(
+  searchParams: URLSearchParams,
+): FilterOptions {
   const params = Object.fromEntries(searchParams);
   return filterOptionsSchema.parse(params);
 }
@@ -70,21 +111,23 @@ export function isValidDate(dateString: string): boolean {
 
 // Helper function to validate provider
 export function isValidProvider(provider: string): boolean {
-  return ['all', 'supersport', 'scorebat'].includes(provider);
+  return ["all", "supersport", "scorebat"].includes(provider);
 }
 
 // Error formatting function
-export function formatValidationError(error: z.ZodError): {
+export function formatValidationError(error: ZodError): {
   message: string;
   details: Array<{ field: string; message: string }>;
 } {
-  const details = error.errors.map(err => ({
-    field: err.path.join('.'),
-    message: err.message,
-  }));
+  const details = error.errors.map(
+    (err: { path: string[]; message: string }) => ({
+      field: err.path.join("."),
+      message: err.message,
+    }),
+  );
 
   return {
-    message: 'Validation failed',
+    message: "Validation failed",
     details,
   };
 }
@@ -93,7 +136,10 @@ export function formatValidationError(error: z.ZodError): {
 export function safeValidateHighlightQuery(searchParams: URLSearchParams): {
   success: boolean;
   data?: HighlightQuery;
-  error?: { message: string; details: Array<{ field: string; message: string }> };
+  error?: {
+    message: string;
+    details: Array<{ field: string; message: string }>;
+  };
 } {
   try {
     const data = validateHighlightQuery(searchParams);
@@ -102,15 +148,15 @@ export function safeValidateHighlightQuery(searchParams: URLSearchParams): {
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: formatValidationError(error)
+        error: formatValidationError(error),
       };
     }
     return {
       success: false,
       error: {
-        message: 'Unknown validation error',
-        details: []
-      }
+        message: "Unknown validation error",
+        details: [],
+      },
     };
   }
 }

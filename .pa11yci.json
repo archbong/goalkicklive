@@ -1,0 +1,71 @@
+{
+  "defaults": {
+    "timeout": 30000,
+    "wait": 2000,
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+    },
+    "hideElements": [
+      ".ads",
+      "[data-ad]",
+      ".ad-container",
+      "#google_ads_iframe",
+      ".video-ads"
+    ],
+    "ignore": [
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Fail",
+      "WCAG2AA.Principle3.Guideline3_2.3_2_2.H32.2"
+    ]
+  },
+  "urls": [
+    {
+      "url": "http://localhost:3000/en",
+      "name": "Home Page"
+    },
+    {
+      "url": "http://localhost:3000/en/highlights",
+      "name": "Highlights Page"
+    },
+    {
+      "url": "http://localhost:3000/en/highlights?competition=premier-league",
+      "name": "Highlights with Filters"
+    },
+    {
+      "url": "http://localhost:3000/en/about",
+      "name": "About Page"
+    },
+    {
+      "url": "http://localhost:3000/en/contact",
+      "name": "Contact Page"
+    },
+    {
+      "url": "http://localhost:3000/en/privacy-policy",
+      "name": "Privacy Policy"
+    },
+    {
+      "url": "http://localhost:3000/en/terms-and-conditions",
+      "name": "Terms and Conditions"
+    }
+  ],
+  "standard": "WCAG2AA",
+  "runners": [
+    "axe",
+    "htmlcs"
+  ],
+  "reporter": [
+    "cli",
+    "json"
+  ],
+  "threshold": {
+    "errors": 5,
+    "warnings": 10,
+    "notices": 20
+  },
+  "concurrency": 3,
+  "retries": 2,
+  "sitemap": false,
+  "sitemap-exclude": [],
+  "sitemap-find": "",
+  "sitemap-replace": "",
+  "sitemap-index": false
+}

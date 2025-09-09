@@ -66,7 +66,26 @@ model Competition {
   slug     String   @unique
   country  String?
   matches  Match[]
-  
+
   // Example: enforcing unique competitions by name+country
   @@unique([name, country])
+}
+
+model WebVitalMetric {
+  id             Int      @id @default(autoincrement())
+  name           String   // CLS, FID, LCP, FCP, TTFB, INP
+  value          Float    // The metric value
+  rating         String   // "good", "needs-improvement", "poor"
+  metricId       String   // Unique ID for the metric instance
+  page           String   // Page URL where metric was captured
+  timestamp      DateTime // When the metric was captured
+  userAgent      String?  // User agent string
+  connectionType String?  // Network connection type
+  referrer       String?  // Referrer URL
+  language       String?  // Accept-Language header
+
+  @@index([name])
+  @@index([rating])
+  @@index([timestamp])
+  @@index([page])
 }

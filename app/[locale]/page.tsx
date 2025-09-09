@@ -23,10 +23,13 @@ export default async function HomePage() {
               <span className="text-green-500">Football Highlights</span>
             </h1>
             <p className="text-lg mb-6 text-gray-300 max-w-lg">
-              Get instant access to match highlights, goals, and top moments from
-              leagues around the world.
+              Get instant access to match highlights, goals, and top moments
+              from leagues around the world.
             </p>
-            <Button size="lg" className="shadow-lg hover:scale-105 transition-transform">
+            <Button
+              size="lg"
+              className="shadow-lg hover:scale-105 transition-transform"
+            >
               <Link href="/highlights">View Highlights</Link>
             </Button>
           </div>
@@ -43,7 +46,6 @@ export default async function HomePage() {
               />
             </div>
           </div>
-
         </Container>
       </section>
 
@@ -73,7 +75,7 @@ export default async function HomePage() {
                 {/* Thumbnail */}
                 <div className="relative overflow-hidden">
                   <Image
-                    src={highlight.thumbnail}
+                    src={highlight.thumbnailUrl}
                     alt={highlight.title}
                     width={400}
                     height={200}
@@ -89,7 +91,7 @@ export default async function HomePage() {
                     {highlight.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-4">
-                    {new Date(highlight.date).toLocaleDateString()}
+                    {new Date(highlight.matchDate).toLocaleDateString()}
                   </p>
 
                   {/* Watch Button */}
@@ -106,7 +108,6 @@ export default async function HomePage() {
           </div>
         </Container>
       </section>
-
 
       {/* Latest Blogs */}
       <section className="py-16 bg-white">
