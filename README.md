@@ -200,3 +200,37 @@ LanguageSelector.tsx – Multi-language support.
 2. **Phase 2** – Live Matches, News, Advertisers.
 3. **Phase 3** – Dashboard, Community, Help Center.
 4. **Phase 4** – Multi-language, global compliance.
+
+
+## Apis for supersport
+https://supersport.com/apix
+https://supersport.com/apix/content
+https://supersport.com/apix/content/v5
+https://supersport.com/apix/content/v5.1
+https://supersport.com/apix/content/v5.1/indaleko-web
+https://supersport.com/apix/content/v5.1/indaleko-web/curatedfavourites
+https://supersport.com/apix/content/v5/countries
+https://supersport.com/apix/football
+https://supersport.com/apix/football/v5.1
+https://supersport.com/apix/football/v5.1/feed
+https://supersport.com/apix/football/v5.1/feed/score
+https://supersport.com/apix/football/v5.1/feed/score/summary
+https://supersport.com/apix/football/v5.1/feed/score/summary?pageSize=10&eventStatusIds=1,2&startDate=1757372400&endDate=1757458799&orderAscending=true&region=de&platform=indaleko-web
+https://supersport.com/apix/guide/v5.3/livenow
+https://supersport.com/apix/guide/v5.3/livenow?countryCode=de&live=true
+https://supersport.com/apix/guide/v5.3/livenow?countryCode=nl&live=true
+https://supersport.com/apix/guide/v5.3/livenow?sport=football&countryCode=de&live=true
+
+
+## APIs for scorebat
+ENDPOINTS
+You can retrieve the embed codes of the videos in JSON format from the following endpoints:
+
+Recent Feed
+https://www.scorebat.com/video-api/v3/feed/?token=[YOUR_API_TOKEN]
+
+Competition
+https://www.scorebat.com/video-api/v3/competition/england-premier-league/?token=[YOUR_API_TOKEN]
+
+Team
+https://www.scorebat.com/video-api/v3/team/real-madrid/?token=[YOUR_API_TOKEN]
