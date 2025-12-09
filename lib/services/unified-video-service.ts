@@ -1,27 +1,35 @@
 // lib/services/unified-video-service.ts
-import { VideoProvider, UnifiedHighlight, HighlightFilters } from '@/types/highlight';
-import { redis } from '@/lib/redis';
+import {
+  VideoProvider,
+  UnifiedHighlight,
+  HighlightFilters,
+} from "@/types/highlight";
+import { redis } from "@/lib/redis";
 
 export class UnifiedVideoService {
   private providers: VideoProvider[];
 
   constructor(providers: VideoProvider[]) {
     this.providers = providers;
-    console.log(`UnifiedVideoService created with ${providers.length} providers`);
+    console.log(
+      `UnifiedVideoService created with ${providers.length} providers`,
+    );
   }
 
-  async getHighlights(filters: HighlightFilters = {}): Promise<UnifiedHighlight[]> {
+  async getHighlights(
+    filters: HighlightFilters = {},
+  ): Promise<UnifiedHighlight[]> {
     const cacheKey = this.generateCacheKey(filters);
 
     // Try to get from cache first
     try {
       const cached = await redis.get(cacheKey);
       if (cached) {
-        console.log('Cache hit for highlights:', cacheKey);
+        console.log("Cache hit for highlights:", cacheKey);
         return JSON.parse(cached);
       }
     } catch (error) {
-      console.warn('Redis cache unavailable, proceeding without cache:', error);
+      console.warn("Redis cache unavailable, proceeding without cache:", error);
     }
 
     // Fetch from providers with fallback mechanism
@@ -29,15 +37,21 @@ export class UnifiedVideoService {
 
     for (const provider of this.providers) {
       try {
-        console.log(`Fetching highlights from ${provider.getProviderName()}...`);
+        console.log(
+          `Fetching highlights from ${provider.getProviderName()}...`,
+        );
         const providerHighlights = await provider.getHighlights(filters);
-        console.log(`Received ${providerHighlights.length} highlights from ${provider.getProviderName()}`);
+        console.log(
+          `Received ${providerHighlights.length} highlights from ${provider.getProviderName()}`,
+        );
 
         allHighlights = [...allHighlights, ...providerHighlights];
 
         // If we have enough results, break early
         if (filters.pageSize && allHighlights.length >= filters.pageSize) {
-          console.log(`Reached page size limit (${filters.pageSize}), stopping provider queries`);
+          console.log(
+            `Reached page size limit (${filters.pageSize}), stopping provider queries`,
+          );
           break;
         }
       } catch (error) {
@@ -51,11 +65,13 @@ export class UnifiedVideoService {
 
     // Cache the results
     try {
-      const cacheTtl = parseInt(process.env.CACHE_TTL || '300');
+      const cacheTtl = parseInt(process.env.CACHE_TTL || "300");
       await redis.setex(cacheKey, cacheTtl, JSON.stringify(filteredHighlights));
-      console.log(`Cached ${filteredHighlights.length} highlights for ${cacheTtl} seconds`);
+      console.log(
+        `Cached ${filteredHighlights.length} highlights for ${cacheTtl} seconds`,
+      );
     } catch (error) {
-      console.warn('Failed to cache results:', error);
+      console.warn("Failed to cache results:", error);
     }
 
     return filteredHighlights;
@@ -72,34 +88,42 @@ export class UnifiedVideoService {
     return `highlights:${filterString}`;
   }
 
-  private applyFilters(highlights: UnifiedHighlight[], filters: HighlightFilters): UnifiedHighlight[] {
+  private applyFilters(
+    highlights: UnifiedHighlight[],
+    filters: HighlightFilters,
+  ): UnifiedHighlight[] {
     let filtered = [...highlights];
 
     // Apply provider filter
-    if (filters.provider && filters.provider !== 'all') {
-      filtered = filtered.filter(h => h.provider === filters.provider);
+    if (filters.provider && filters.provider !== "all") {
+      filtered = filtered.filter((h) => h.provider === filters.provider);
     }
 
     // Apply competition filter
     if (filters.competition) {
-      filtered = filtered.filter(h =>
-        h.competition.toLowerCase().includes(filters.competition!.toLowerCase())
+      filtered = filtered.filter((h) =>
+        h.competition
+          .toLowerCase()
+          .includes(filters.competition!.toLowerCase()),
       );
     }
 
     // Apply team filter
     if (filters.team) {
-      filtered = filtered.filter(h =>
-        h.teams.home.toLowerCase().includes(filters.team!.toLowerCase()) ||
-        h.teams.away.toLowerCase().includes(filters.team!.toLowerCase())
+      filtered = filtered.filter(
+        (h) =>
+          h.teams.home.toLowerCase().includes(filters.team!.toLowerCase()) ||
+          h.teams.away.toLowerCase().includes(filters.team!.toLowerCase()),
       );
     }
 
     // Apply date filter
     if (filters.date) {
       const filterDate = new Date(filters.date);
-      filtered = filtered.filter(h =>
-        h.matchDate.toISOString().split('T')[0] === filterDate.toISOString().split('T')[0]
+      filtered = filtered.filter(
+        (h) =>
+          h.matchDate.toISOString().split("T")[0] ===
+          filterDate.toISOString().split("T")[0],
       );
     }
 
@@ -121,8 +145,8 @@ export class UnifiedVideoService {
 
   private removeDuplicates(highlights: UnifiedHighlight[]): UnifiedHighlight[] {
     const seen = new Set<string>();
-    return highlights.filter(highlight => {
-      const key = `${highlight.title}_${highlight.teams.home}_${highlight.teams.away}_${highlight.matchDate.toISOString().split('T')[0]}`;
+    return highlights.filter((highlight) => {
+      const key = `${highlight.title}_${highlight.teams.home}_${highlight.teams.away}_${highlight.matchDate.toISOString().split("T")[0]}`;
       if (seen.has(key)) {
         return false;
       }
@@ -132,19 +156,19 @@ export class UnifiedVideoService {
   }
 
   async getAvailableProviders(): Promise<string[]> {
-    return this.providers.map(p => p.getProviderName());
+    return this.providers.map((p) => p.getProviderName());
   }
 
   async getProviderStats(): Promise<{
     [providerName: string]: {
       highlightsCount: number;
-      status: 'active' | 'inactive';
+      status: "active" | "inactive";
     };
   }> {
     const stats: {
       [providerName: string]: {
         highlightsCount: number;
-        status: 'active' | 'inactive';
+        status: "active" | "inactive";
       };
     } = {};
 
@@ -153,12 +177,16 @@ export class UnifiedVideoService {
         const highlights = await provider.getHighlights({ pageSize: 1 });
         stats[provider.getProviderName()] = {
           highlightsCount: highlights.length,
-          status: 'active',
+          status: "active",
         };
       } catch (error) {
+        console.error(
+          `Error checking provider ${provider.getProviderName()}:`,
+          error,
+        );
         stats[provider.getProviderName()] = {
           highlightsCount: 0,
-          status: 'inactive',
+          status: "inactive",
         };
       }
     }
@@ -171,17 +199,17 @@ export class UnifiedVideoService {
       if (filters) {
         const cacheKey = this.generateCacheKey(filters);
         await redis.del(cacheKey);
-        console.log('Cleared cache for key:', cacheKey);
+        console.log("Cleared cache for key:", cacheKey);
       } else {
         // Clear all highlight caches
-        const keys = await redis.keys('highlights:*');
+        const keys = await redis.keys("highlights:*");
         if (keys.length > 0) {
           await redis.del(...keys);
           console.log(`Cleared ${keys.length} cache keys`);
         }
       }
     } catch (error) {
-      console.error('Failed to clear cache:', error);
+      console.error("Failed to clear cache:", error);
     }
   }
 }

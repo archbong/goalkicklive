@@ -11,7 +11,7 @@ export async function ensureTeam(name: string, country?: string) {
 }
 
 export async function findCompetitionByName(name: string, country?: string) {
-  let comp = await prisma.competition.findFirst({
+  const comp = await prisma.competition.findFirst({
     where: { name, ...(country ? { country } : {}) },
   });
   if (comp) return comp;

@@ -8,7 +8,7 @@ export interface ScorebatVideo {
   side1?: { name: string };
   side2?: { name: string };
   embed: string; // iframe HTML from Scorebat
-  date: string;  // ISO date string
+  date: string; // ISO date string
 }
 
 export async function indexScorebatVideo(video: ScorebatVideo) {
@@ -32,7 +32,7 @@ export async function indexScorebatVideo(video: ScorebatVideo) {
   };
 
   // Store as a single JSON document
-  await redis.json.set(key, "$", doc);
+  await redis.set(key, JSON.stringify(doc));
 
   return key; // return the Redis key for reference
 }

@@ -119,12 +119,10 @@ export function formatValidationError(error: ZodError): {
   message: string;
   details: Array<{ field: string; message: string }>;
 } {
-  const details = error.errors.map(
-    (err: { path: string[]; message: string }) => ({
-      field: err.path.join("."),
-      message: err.message,
-    }),
-  );
+  const details = error.issues.map((err) => ({
+    field: err.path.map(String).join("."),
+    message: err.message,
+  }));
 
   return {
     message: "Validation failed",
