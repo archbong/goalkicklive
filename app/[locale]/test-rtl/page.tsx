@@ -1,4 +1,7 @@
 // goalkicklive/app/[locale]/test-rtl/page.tsx
+"use client";
+
+import Link from "next/link";
 import useRTL from "@/hooks/useRTL";
 import { locales, isRTL, getTextDirection } from "@/i18n/config";
 
@@ -19,10 +22,19 @@ export default function RTLTestPage() {
                 Current Locale Info
               </h2>
               <div className="space-y-2">
-                <p><strong>Locale:</strong> {locale}</p>
-                <p><strong>Is RTL:</strong> {currentIsRTL ? "Yes" : "No"}</p>
-                <p><strong>Direction:</strong> {direction}</p>
-                <p><strong>Text Alignment:</strong> {currentIsRTL ? "Right" : "Left"}</p>
+                <p>
+                  <strong>Locale:</strong> {locale}
+                </p>
+                <p>
+                  <strong>Is RTL:</strong> {currentIsRTL ? "Yes" : "No"}
+                </p>
+                <p>
+                  <strong>Direction:</strong> {direction}
+                </p>
+                <p>
+                  <strong>Text Alignment:</strong>{" "}
+                  {currentIsRTL ? "Right" : "Left"}
+                </p>
               </div>
             </div>
 
@@ -33,7 +45,8 @@ export default function RTLTestPage() {
               <div className="space-y-2">
                 {locales.map((loc) => (
                   <p key={loc}>
-                    <strong>{loc}:</strong> {isRTL(loc) ? "RTL" : "LTR"} ({getTextDirection(loc)})
+                    <strong>{loc}:</strong> {isRTL(loc) ? "RTL" : "LTR"} (
+                    {getTextDirection(loc)})
                   </p>
                 ))}
               </div>
@@ -68,18 +81,19 @@ export default function RTLTestPage() {
             </h2>
             <div className="space-y-4">
               <p className="text-lg">
-                This text should flow {currentIsRTL ? "right-to-left" : "left-to-right"}.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                This text should flow{" "}
+                {currentIsRTL ? "right-to-left" : "left-to-right"}. Lorem ipsum
+                dolor sit amet, consectetur adipiscing elit.
               </p>
               <div className="bg-white p-4 rounded border">
                 <p className={currentIsRTL ? "text-right" : "text-left"}>
-                  This paragraph is explicitly aligned to the {currentIsRTL ? "right" : "left"}.
+                  This paragraph is explicitly aligned to the{" "}
+                  {currentIsRTL ? "right" : "left"}.
                 </p>
-                <p className="text-center">
-                  This paragraph is centered.
-                </p>
+                <p className="text-center">This paragraph is centered.</p>
                 <p className={currentIsRTL ? "text-left" : "text-right"}>
-                  This paragraph is explicitly aligned to the {currentIsRTL ? "left" : "right"}.
+                  This paragraph is explicitly aligned to the{" "}
+                  {currentIsRTL ? "left" : "right"}.
                 </p>
               </div>
             </div>
@@ -90,12 +104,15 @@ export default function RTLTestPage() {
               Navigation Test
             </h2>
             <div className="flex space-x-4">
-              <a href="/highlights" className="text-blue-600 hover:underline">
+              <Link
+                href="/highlights"
+                className="text-blue-600 hover:underline"
+              >
                 Go to Highlights
-              </a>
-              <a href="/" className="text-blue-600 hover:underline">
+              </Link>
+              <Link href="/" className="text-blue-600 hover:underline">
                 Go Home
-              </a>
+              </Link>
             </div>
           </div>
         </div>

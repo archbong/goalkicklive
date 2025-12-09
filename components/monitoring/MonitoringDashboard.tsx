@@ -7,11 +7,8 @@ import {
   AlertTriangle,
   BarChart3,
   Cpu,
-  Database,
-  Eye,
-  Globe,
   Server,
-  Users
+  Users,
 } from "lucide-react";
 import useRTL from "@/hooks/useRTL";
 
@@ -53,7 +50,6 @@ interface MonitoringDashboardProps {
 
 export default function MonitoringDashboard({
   refreshInterval = 30000,
-  locale
 }: MonitoringDashboardProps) {
   const { isRTL, direction } = useRTL();
   const [stats, setStats] = useState<MonitoringStats | null>(null);
@@ -63,16 +59,16 @@ export default function MonitoringDashboard({
   const fetchMonitoringData = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/monitoring/stats');
+      const response = await fetch("/api/monitoring/stats");
       if (!response.ok) {
-        throw new Error('Failed to fetch monitoring data');
+        throw new Error("Failed to fetch monitoring data");
       }
       const data = await response.json();
       setStats(data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-      console.error('Error fetching monitoring data:', err);
+      setError(err instanceof Error ? err.message : "Unknown error");
+      console.error("Error fetching monitoring data:", err);
     } finally {
       setLoading(false);
     }
@@ -85,18 +81,25 @@ export default function MonitoringDashboard({
     return () => clearInterval(interval);
   }, [refreshInterval]);
 
-  const getVitalRating = (value: number, thresholds: { good: number; poor: number }) => {
-    if (value <= thresholds.good) return 'good';
-    if (value <= thresholds.poor) return 'needs-improvement';
-    return 'poor';
+  const getVitalRating = (
+    value: number,
+    thresholds: { good: number; poor: number },
+  ) => {
+    if (value <= thresholds.good) return "good";
+    if (value <= thresholds.poor) return "needs-improvement";
+    return "poor";
   };
 
   const getRatingColor = (rating: string) => {
     switch (rating) {
-      case 'good': return 'text-green-600 bg-green-100';
-      case 'needs-improvement': return 'text-yellow-600 bg-yellow-100';
-      case 'poor': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case "good":
+        return "text-green-600 bg-green-100";
+      case "needs-improvement":
+        return "text-yellow-600 bg-yellow-100";
+      case "poor":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-gray-600 bg-gray-100";
     }
   };
 
@@ -173,24 +176,59 @@ export default function MonitoringDashboard({
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
-            { key: 'LCP', value: stats.webVitals.LCP, thresholds: { good: 2500, poor: 4000 }, label: 'LCP' },
-            { key: 'FID', value: stats.webVitals.FID, thresholds: { good: 100, poor: 300 }, label: 'FID' },
-            { key: 'CLS', value: stats.webVitals.CLS, thresholds: { good: 0.1, poor: 0.25 }, label: 'CLS' },
-            { key: 'FCP', value: stats.webVitals.FCP, thresholds: { good: 1800, poor: 3000 }, label: 'FCP' },
-            { key: 'TTFB', value: stats.webVitals.TTFB, thresholds: { good: 800, poor: 1800 }, label: 'TTFB' },
-            { key: 'INP', value: stats.webVitals.INP, thresholds: { good: 200, poor: 500 }, label: 'INP' },
+            {
+              key: "LCP",
+              value: stats.webVitals.LCP,
+              thresholds: { good: 2500, poor: 4000 },
+              label: "LCP",
+            },
+            {
+              key: "FID",
+              value: stats.webVitals.FID,
+              thresholds: { good: 100, poor: 300 },
+              label: "FID",
+            },
+            {
+              key: "CLS",
+              value: stats.webVitals.CLS,
+              thresholds: { good: 0.1, poor: 0.25 },
+              label: "CLS",
+            },
+            {
+              key: "FCP",
+              value: stats.webVitals.FCP,
+              thresholds: { good: 1800, poor: 3000 },
+              label: "FCP",
+            },
+            {
+              key: "TTFB",
+              value: stats.webVitals.TTFB,
+              thresholds: { good: 800, poor: 1800 },
+              label: "TTFB",
+            },
+            {
+              key: "INP",
+              value: stats.webVitals.INP,
+              thresholds: { good: 200, poor: 500 },
+              label: "INP",
+            },
           ].map(({ key, value, thresholds, label }) => {
             const rating = getVitalRating(value, thresholds);
             return (
               <div key={key} className="bg-gray-50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700">{label}</span>
-                  <span className={`text-xs px-2 py-1 rounded-full ${getRatingColor(rating)}`}>
-                    {rating.replace('-', ' ')}
+                  <span className="text-sm font-medium text-gray-700">
+                    {label}
+                  </span>
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full ${getRatingColor(rating)}`}
+                  >
+                    {rating.replace("-", " ")}
                   </span>
                 </div>
                 <div className="text-2xl font-bold text-gray-900">
-                  {value.toFixed(1)}{key === 'CLS' ? '' : 'ms'}
+                  {value.toFixed(1)}
+                  {key === "CLS" ? "" : "ms"}
                 </div>
               </div>
             );
@@ -251,7 +289,9 @@ export default function MonitoringDashboard({
               <span className="text-sm text-gray-600">
                 {isRTL ? "زوار فريدون" : "Unique Visitors"}
               </span>
-              <span className="font-medium">{stats.traffic.uniqueVisitors}</span>
+              <span className="font-medium">
+                {stats.traffic.uniqueVisitors}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-gray-600">
@@ -273,7 +313,9 @@ export default function MonitoringDashboard({
               <span className="text-sm text-gray-600">
                 {isRTL ? "إجمالي الأخطاء" : "Total Errors"}
               </span>
-              <span className="font-medium text-red-600">{stats.errors.total}</span>
+              <span className="font-medium text-red-600">
+                {stats.errors.total}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-gray-600">

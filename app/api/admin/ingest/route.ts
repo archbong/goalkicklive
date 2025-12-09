@@ -4,7 +4,6 @@ import { withCORS, preflight } from "@/lib/cors";
 import { fetchRecent, SBVideo } from "@/lib/scorebat";
 import { ensureTeam, findCompetitionByName } from "@/lib/mappers";
 import { sha256 } from "@/lib/checksum";
-import { redis } from "@/lib/redis";
 
 export const runtime = "nodejs";
 
@@ -24,11 +23,16 @@ export async function POST(req: NextRequest) {
   const baseResponse = new NextResponse(null, { status: 200 });
   const cors = withCORS(baseResponse, origin);
   const unauthorized = requireAdmin(req);
-  if (unauthorized) return new NextResponse(unauthorized.body, { status: 401, headers: cors.headers });
+  if (unauthorized)
+    return new NextResponse(unauthorized.body, {
+      status: 401,
+      headers: cors.headers,
+    });
 
   const videos: SBVideo[] = await fetchRecent();
 
-  let created = 0, updated = 0, skipped = 0;
+  let created = 0,
+    skipped = 0;
 
   for (const v of videos) {
     const title = v.title;
@@ -92,5 +96,7 @@ export async function POST(req: NextRequest) {
     created++;
   }
 
-  return new NextResponse(JSON.stringify({ created, skipped }), { headers: cors.headers });
+  return new NextResponse(JSON.stringify({ created, skipped }), {
+    headers: cors.headers,
+  });
 }

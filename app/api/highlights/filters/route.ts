@@ -76,25 +76,31 @@ export async function GET() {
     });
 
     const response = {
-      competitions: competitions.map((c: any) => ({
-        value: c.slug,
-        label: c.name,
-        country: c.country,
-      })),
-      teams: teams.map((t: any) => ({
-        value: t.slug,
-        label: t.name,
-        country: t.country,
-      })),
+      competitions: competitions.map(
+        (c: { slug: string; name: string; country: string | null }) => ({
+          value: c.slug,
+          label: c.name,
+          country: c.country,
+        }),
+      ),
+      teams: teams.map(
+        (t: { slug: string; name: string; country: string | null }) => ({
+          value: t.slug,
+          label: t.name,
+          country: t.country,
+        }),
+      ),
       dateRange: {
         min: minDate,
         max: maxDate,
       },
-      providers: providerCounts.map((p: any) => ({
-        id: p.provider || "unknown",
-        name: p.provider || "Unknown",
-        count: p._count.id,
-      })),
+      providers: providerCounts.map(
+        (p: { provider: string | null; _count: { id: number } }) => ({
+          id: p.provider || "unknown",
+          name: p.provider || "Unknown",
+          count: p._count.id,
+        }),
+      ),
     };
 
     // Cache the response for 1 hour

@@ -1,31 +1,81 @@
-import { Redis } from "@upstash/redis";
+import { redis } from "@/lib/redis";
 
-// Only initialize if env var exists
-let client: Redis | undefined;
-
-if (process.env.REDIS_URL) {
-  // Upstash Redis uses just the URL (and optionally token)
-  client = new Redis({
-    url: process.env.REDIS_URL,
-    token: process.env.REDIS_TOKEN ?? "", // if required
-  });
-}
-
-// Export a singleton
-export const redis = client;
-
+// Cache functions using ioredis
 export async function cacheGet<T>(key: string): Promise<T | null> {
   if (!redis) return null;
-  const value = await redis.get(key);
-  return typeof value === "string" ? (JSON.parse(value) as T) : null;
+
+  try {
+    const value = await redis.get(key);
+    if (value === null) return null;
+
+    return JSON.parse(value) as T;
+  } catch (error) {
+    console.error(`Cache get error for key ${key}:`, error);
+    return null;
+  }
 }
 
-export async function cacheSet<T>(key: string, value: T, ttlSeconds?: number): Promise<void> {
+export async function cacheSet<T>(
+  key: string,
+  value: T,
+  ttlSeconds?: number,
+): Promise<void> {
   if (!redis) return;
-  const jsonValue = JSON.stringify(value);
-  if (ttlSeconds) {
-    await redis.set(key, jsonValue, { ex: ttlSeconds });
-  } else {
-    await redis.set(key, jsonValue);
+
+  try {
+    const jsonValue = JSON.stringify(value);
+
+    if (ttlSeconds) {
+      // Use EX option for expiration in seconds
+      await redis.set(key, jsonValue, "EX", ttlSeconds);
+    } else {
+      await redis.set(key, jsonValue);
+    }
+  } catch (error) {
+    console.error(`Cache set error for key ${key}:`, error);
   }
+}
+
+export async function cacheDel(key: string): Promise<void> {
+  if (!redis) return;
+
+  try {
+    await redis.del(key);
+  } catch (error) {
+    console.error(`Cache delete error for key ${key}:`, error);
+  }
+}
+
+export async function cacheKeys(pattern: string): Promise<string[]> {
+  if (!redis) return [];
+
+  try {
+    return await redis.keys(pattern);
+  } catch (error) {
+    console.error(`Cache keys error for pattern ${pattern}:`, error);
+    return [];
+  }
+}
+
+export async function cacheFlush(pattern?: string): Promise<void> {
+  if (!redis) return;
+
+  try {
+    if (pattern) {
+      const keys = await redis.keys(pattern);
+      if (keys.length > 0) {
+        await redis.del(...keys);
+      }
+    } else {
+      // Note: FLUSHALL is dangerous in production, use with caution
+      await redis.flushall();
+    }
+  } catch (error) {
+    console.error("Cache flush error:", error);
+  }
+}
+
+// Check if cache is available
+export function isCacheAvailable(): boolean {
+  return !!redis;
 }

@@ -6,7 +6,12 @@ export async function POST() {
   try {
     const result = await ingestScorebatVideos();
     return NextResponse.json({ success: true, ...result });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const errorMessage =
+      err instanceof Error ? err.message : "Unknown error occurred";
+    return NextResponse.json(
+      { success: false, error: errorMessage },
+      { status: 500 },
+    );
   }
 }

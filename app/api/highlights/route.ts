@@ -47,6 +47,8 @@ export async function GET(request: Request) {
       OR?: Array<
         | { homeTeam: { slug: string } }
         | { awayTeam: { slug: string } }
+        | { homeTeam: { slug: { in: string[] } } }
+        | { awayTeam: { slug: { in: string[] } } }
         | { title?: { contains: string; mode: "insensitive" } }
         | { homeTeam?: { name: { contains: string; mode: "insensitive" } } }
         | { awayTeam?: { name: { contains: string; mode: "insensitive" } } }
@@ -140,20 +142,34 @@ export async function GET(request: Request) {
     });
 
     // Transform to highlight format
-    const highlights = matches.map((match: any) => ({
-      id: match.id.toString(),
-      title: match.title || `${match.homeTeam.name} vs ${match.awayTeam.name}`,
-      thumbnail:
-        match.videos[0]?.thumbnailUrl || "/images/default-thumbnail.jpg",
-      videoUrl: match.videos[0]?.sourceUrl || "",
-      date: match.matchDate.toISOString(),
-      competition: match.competition.name,
-      teams: {
-        home: match.homeTeam.name,
-        away: match.awayTeam.name,
-      },
-      score: null, // Can be enhanced with actual score data
-    }));
+    const highlights = matches.map(
+      (match: {
+        id: number;
+        title?: string | null;
+        homeTeam: { name: string };
+        awayTeam: { name: string };
+        competition: { name: string };
+        matchDate: Date;
+        videos: Array<{
+          thumbnailUrl?: string | null;
+          sourceUrl?: string | null;
+        }>;
+      }) => ({
+        id: match.id.toString(),
+        title:
+          match.title || `${match.homeTeam.name} vs ${match.awayTeam.name}`,
+        thumbnail:
+          match.videos[0]?.thumbnailUrl || "/images/default-thumbnail.jpg",
+        videoUrl: match.videos[0]?.sourceUrl || "",
+        date: match.matchDate.toISOString(),
+        competition: match.competition.name,
+        teams: {
+          home: match.homeTeam.name,
+          away: match.awayTeam.name,
+        },
+        score: null, // Can be enhanced with actual score data
+      }),
+    );
 
     const response = {
       highlights,

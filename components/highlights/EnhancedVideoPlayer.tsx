@@ -2,7 +2,7 @@
 
 import useRTL from "@/hooks/useRTL";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   Play,
   Pause,
@@ -27,7 +27,7 @@ export default function EnhancedVideoPlayer({
 }: EnhancedVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { isRTL, direction } = useRTL();
+  const { isRTL } = useRTL();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -49,25 +49,24 @@ export default function EnhancedVideoPlayer({
     return () => clearTimeout(timer);
   }, [showControls]);
 
-  const togglePlayPause = () => {
+  const togglePlayPause = useCallback(() => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
         videoRef.current.play();
       }
-      setIsPlaying(!isPlaying);
     }
-  };
+  }, [isPlaying]);
 
-  const toggleMute = () => {
+  const toggleMute = useCallback(() => {
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
     }
-  };
+  }, [isMuted]);
 
-  const toggleFullscreen = () => {
+  const toggleFullscreen = useCallback(() => {
     if (!containerRef.current) return;
 
     if (!isFullscreen) {
@@ -79,7 +78,7 @@ export default function EnhancedVideoPlayer({
         document.exitFullscreen();
       }
     }
-  };
+  }, [isFullscreen]);
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
@@ -162,7 +161,14 @@ export default function EnhancedVideoPlayer({
 
     document.addEventListener("keydown", handleKeyPress);
     return () => document.removeEventListener("keydown", handleKeyPress);
-  }, [isPlaying, isMuted, volume]);
+  }, [
+    isPlaying,
+    isMuted,
+    volume,
+    toggleFullscreen,
+    toggleMute,
+    togglePlayPause,
+  ]);
 
   // Handle fullscreen changes
   useEffect(() => {

@@ -4,20 +4,27 @@ import { prisma } from "@/lib/prisma";
 import { withCORS, preflight } from "@/lib/cors";
 import { getPaginationParams } from "@/lib/pagination";
 
+interface RouteContext {
+  params: Promise<{ slug: string }>;
+}
+
 export const runtime = "nodejs";
 
 export async function OPTIONS(req: NextRequest) {
   return preflight(req.headers.get("origin") ?? undefined);
 }
 
-export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(req: NextRequest, context: RouteContext) {
+  const params = await context.params;
   const { page, limit, skip } = getPaginationParams(req);
 
   const competition = await prisma.competition.findUnique({
     where: { slug: params.slug },
   });
   if (!competition) {
-    return withCORS(NextResponse.json({ error: "Competition not found" }, { status: 404 }));
+    return withCORS(
+      NextResponse.json({ error: "Competition not found" }, { status: 404 }),
+    );
   }
 
   const [items, total] = await Promise.all([

@@ -1,6 +1,5 @@
 // app/api/videos/index/route.ts
 import { NextResponse } from "next/server";
-import { redis } from "@/lib/redis";
 import { indexScorebatVideo } from "@/lib/videoIndexer";
 
 export async function POST(req: Request) {
@@ -10,18 +9,17 @@ export async function POST(req: Request) {
     if (!video?.id || !video?.title) {
       return NextResponse.json(
         { error: "Missing required fields: id, title" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     await indexScorebatVideo(video);
 
     return NextResponse.json({ success: true, video });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error indexing video:", error);
-    return NextResponse.json(
-      { error: "Failed to index video" },
-      { status: 500 }
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to index video";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
