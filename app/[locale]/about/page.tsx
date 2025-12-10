@@ -1,5 +1,6 @@
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import type { Locale } from "@/i18n/config";
+import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
 
 export default async function About({
   params,
@@ -11,6 +12,15 @@ export default async function About({
 
   return (
     <section className="bg-gray-50 py-16">
+      {/* Top Banner Ad */}
+      <TopBanner
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="1200px"
+        margin="my-4"
+      />
+
       <div className="container mx-auto px-4 space-y-12">
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto space-y-4">
@@ -94,6 +104,15 @@ export default async function About({
               </div>
             ))}
           </div>
+
+          {/* Ad between What We Offer and Team Section */}
+          <BetweenContentAd
+            index={1}
+            show={true}
+            network="placeholder"
+            responsive={true}
+            maxWidth="800px"
+          />
         </div>
 
         {/* Team Section */}
@@ -165,6 +184,15 @@ export default async function About({
           </div>
         </div>
       </div>
+
+      {/* Bottom Banner Ad */}
+      <BottomBanner
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="1200px"
+        margin="my-8"
+      />
     </section>
   );
 }

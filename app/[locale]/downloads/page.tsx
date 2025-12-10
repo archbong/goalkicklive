@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Apple, QrCode, Smartphone } from "lucide-react";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import type { Locale } from "@/i18n/config";
+import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
 
 export default async function Downloads({
   params,
@@ -15,6 +16,15 @@ export default async function Downloads({
 
   return (
     <section className="bg-gray-50 py-16">
+      {/* Top Banner Ad */}
+      <TopBanner
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="1200px"
+        margin="my-4"
+      />
+
       <div className="container mx-auto px-4 space-y-16">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-6">
@@ -101,6 +111,15 @@ export default async function Downloads({
           </div>
         </div>
 
+        {/* Ad between App Preview and Features */}
+        <BetweenContentAd
+          index={1}
+          show={true}
+          network="placeholder"
+          responsive={true}
+          maxWidth="800px"
+        />
+
         {/* Features Section */}
         <div className="space-y-8">
           <h2 className="text-3xl font-bold text-gray-900 text-center">
@@ -143,6 +162,15 @@ export default async function Downloads({
           </div>
         </div>
 
+        {/* Ad between Features and System Requirements */}
+        <BetweenContentAd
+          index={2}
+          show={true}
+          network="placeholder"
+          responsive={true}
+          maxWidth="800px"
+        />
+
         {/* System Requirements */}
         <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8">
           <div className="max-w-2xl mx-auto text-center space-y-6">
@@ -182,6 +210,15 @@ export default async function Downloads({
           </div>
         </div>
 
+        {/* Ad between System Requirements and Support */}
+        <BetweenContentAd
+          index={3}
+          show={true}
+          network="placeholder"
+          responsive={true}
+          maxWidth="800px"
+        />
+
         {/* Support Section */}
         <div className="text-center space-y-6">
           <h2 className="text-2xl font-bold text-gray-900">
@@ -204,6 +241,15 @@ export default async function Downloads({
           </div>
         </div>
       </div>
+
+      {/* Bottom Banner Ad */}
+      <BottomBanner
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="1200px"
+        margin="my-8"
+      />
     </section>
   );
 }

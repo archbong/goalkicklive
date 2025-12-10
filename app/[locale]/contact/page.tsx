@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import type { Locale } from "@/i18n/config";
+import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
 
 interface ContactPageProps {
   params: Promise<{ locale: Locale }>;
@@ -26,7 +27,7 @@ interface Translations {
 }
 
 export default function Contact({ params }: ContactPageProps) {
-  const [currentLocale, setCurrentLocale] = useState<Locale>("en");
+  const [, setCurrentLocale] = useState<Locale>("en");
   const [translations, setTranslations] = useState<Translations | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [mapVisible, setMapVisible] = useState(false);
@@ -101,6 +102,15 @@ export default function Contact({ params }: ContactPageProps) {
 
   return (
     <section className="bg-gray-50 py-16">
+      {/* Top Banner Ad */}
+      <TopBanner
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="1200px"
+        margin="my-4"
+      />
+
       <div className="container mx-auto px-4 max-w-3xl space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -111,6 +121,15 @@ export default function Contact({ params }: ContactPageProps) {
             {translations.contactPage.description}
           </p>
         </div>
+
+        {/* Ad between Header and Contact Form */}
+        <BetweenContentAd
+          index={1}
+          show={true}
+          network="placeholder"
+          responsive={true}
+          maxWidth="800px"
+        />
 
         {/* Contact Form */}
         <form
@@ -221,7 +240,25 @@ export default function Contact({ params }: ContactPageProps) {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
+
+        {/* Ad between Contact Info and Map */}
+        <BetweenContentAd
+          index={2}
+          show={true}
+          network="placeholder"
+          responsive={true}
+          maxWidth="800px"
+        />
       </div>
+
+      {/* Bottom Banner Ad */}
+      <BottomBanner
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="1200px"
+        margin="my-8"
+      />
     </section>
   );
 }

@@ -2,13 +2,14 @@
 
 ## **📌 Overview**
 
-**Goalkick Live** is a simple business website that promotes our mobile application for live football match streaming. This website serves as a marketing hub to inform users about our mobile app and provide essential business information.
+**Goalkick Live** is a simple business website that promotes our mobile application for live football match streaming. This website serves as a marketing hub to inform users about our mobile app, provide essential business information, and generate revenue through ad placements.
 
 The mobile app (built with Flutter) provides live football match streaming, and this website serves as:
 
 * A **marketing platform** to attract and inform users about our mobile app
 * A **business information hub** with company details and contact information
 * A **download portal** for accessing the mobile app on iOS and Android
+* A **revenue generation platform** through strategic ad placements
 
 ---
 
@@ -49,7 +50,14 @@ project-root/
 ├── lib/                         # Utilities & API functions
 ├── public/                      # Static assets
 ├── locales/                     # Translation files
-└── i18n/                        # Internationalization config
+├── i18n/                        # Internationalization config
+├── config/                      # Configuration files
+│   └── ads.ts                   # Ad configuration
+└── components/ads/              # Ad components
+    ├── AdSlot.tsx               # Individual ad slot component
+    ├── AdManager.tsx            # Ad placement manager
+    ├── AdBanner.tsx             # Banner ad component
+    └── index.ts                 # Component exports
 ```
 
 ---
@@ -63,6 +71,44 @@ project-root/
 - **Privacy Policy** — Data usage and privacy information
 - **Terms & Conditions** — App usage terms and conditions
 - **Settings Page** — User preferences and app settings
+
+## **📢 Ad Integration**
+
+The website includes comprehensive ad integration with the following features:
+
+### **Ad Components**
+- **AdSlot**: Flexible ad component supporting multiple formats and networks
+- **AdManager**: Manages multiple ad placements with priority-based rendering
+- **AdBanner**: Pre-configured banner ads for common positions
+- **BetweenContentAd**: Ads placed between content sections
+
+### **Supported Ad Networks**
+- **Google AdSense**: Full integration with responsive ads
+- **Custom Ads**: Support for custom ad content and sponsorships
+- **Placeholder Ads**: Development and testing ads
+
+### **Ad Formats**
+- **Leaderboard** (728x90): Top and bottom of page banners
+- **Rectangle** (300x250): Between content sections
+- **Large Rectangle** (336x280): Featured content areas
+- **Skyscraper** (120x600): Sidebar placements
+- **Mobile Banner** (320x100): Mobile-optimized ads
+- **Fluid**: Responsive ads that adapt to container size
+
+### **Ad Placements**
+- **Top Banner**: Above page header
+- **Between Content**: Strategically placed between content sections
+- **Bottom Banner**: Below page footer
+- **Sidebar Ads**: Right-hand sidebar placements (desktop only)
+- **Sticky Mobile Ads**: Bottom-sticky ads for mobile users
+
+### **Configuration**
+Ad settings are managed through environment variables and the `config/ads.ts` file:
+- Enable/disable ads globally
+- Configure Google AdSense client ID
+- Set ad limits and refresh intervals
+- Configure ad blocker detection
+- Manage privacy compliance (GDPR/CCPA)
 
 ---
 
@@ -111,6 +157,8 @@ Our mobile application provides:
 * **Tailwind CSS** – Utility-first styling framework
 * **Internationalization** – Multi-language support
 * **Google Tag Manager** – Analytics and tracking integration
+* **Google AdSense** – Ad serving and monetization
+* **Custom Ad Components** – Flexible ad placement system
 
 ---
 
@@ -137,6 +185,12 @@ Our mobile application provides:
    npm run build
    ```
 
+4. **Configure ads (optional):**
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your AdSense client ID and ad settings
+   ```
+
 5. **Start production server:**
    ```bash
    npm start
@@ -150,6 +204,7 @@ Our mobile application provides:
 2. **Brand Awareness** – Establish Goalkick Live as a trusted football streaming platform
 3. **User Support** – Provide essential information and support channels
 4. **Legal Compliance** – Maintain necessary legal documentation and policies
+5. **Revenue Generation** – Monetize traffic through strategic ad placements
 
 ---
 
@@ -163,5 +218,40 @@ For business inquiries, technical support, or partnership opportunities:
 ---
 
 ## **📄 License**
+
+## **💰 Monetization Strategy**
+
+The website implements a balanced ad monetization strategy:
+
+### **Ad Placement Strategy**
+- **Non-intrusive placements**: Ads are placed strategically without disrupting user experience
+- **Content-relevant ads**: Football and sports-related ad targeting
+- **Responsive design**: Ads adapt to different screen sizes and devices
+- **Frequency capping**: Limits on ad frequency to prevent user fatigue
+
+### **Revenue Optimization**
+- **Multiple ad networks**: Support for Google AdSense and custom sponsorships
+- **Performance tracking**: Analytics for ad clicks and impressions
+- **A/B testing**: Testing different ad placements and formats
+- **Seasonal targeting**: Football season-specific ad campaigns
+
+### **User Experience Considerations**
+- **Ad blocker detection**: Polite messages for users with ad blockers
+- **Privacy compliance**: GDPR and CCPA compliant ad serving
+- **Loading optimization**: Async ad loading to prevent page slowdown
+- **Mobile optimization**: Special ad formats for mobile devices
+
+### **Getting Started with Ads**
+1. **Sign up for Google AdSense** at https://www.google.com/adsense
+2. **Get your publisher ID** (starts with `ca-pub-`)
+3. **Update environment variables** in `.env.local`:
+   ```
+   NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT=ca-pub-xxxxxxxxxxxxxxx
+   NEXT_PUBLIC_GOOGLE_ADSENSE_ENABLED=true
+   ```
+4. **Test ad placements** in development mode
+5. **Monitor performance** through AdSense dashboard
+
+---
 
 © 2024 Goalkick Live. All rights reserved.

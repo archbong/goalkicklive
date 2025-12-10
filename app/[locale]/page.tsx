@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import type { Locale } from "@/i18n/config";
+import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
 
 export default async function HomePage({
   params,
@@ -23,6 +24,15 @@ export default async function HomePage({
 
   return (
     <>
+      {/* Top Banner Ad */}
+      <TopBanner
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="1200px"
+        margin="my-4"
+      />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-black via-gray-900 to-black text-white py-20">
         <Container className="flex flex-col lg:flex-row items-center gap-12">
@@ -76,6 +86,15 @@ export default async function HomePage({
           </div>
         </Container>
       </section>
+
+      {/* Ad between Hero and Features */}
+      <BetweenContentAd
+        index={1}
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="800px"
+      />
 
       {/* Features Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 via-white to-gray-100">
@@ -165,6 +184,15 @@ export default async function HomePage({
         </Container>
       </section>
 
+      {/* Ad between Features and Download CTA */}
+      <BetweenContentAd
+        index={2}
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="800px"
+      />
+
       {/* App Download CTA */}
       <section className="py-20 bg-gradient-to-r from-green-600 to-blue-600 text-white">
         <Container className="text-center">
@@ -214,6 +242,15 @@ export default async function HomePage({
           </p>
         </Container>
       </section>
+
+      {/* Ad between Download CTA and Testimonials */}
+      <BetweenContentAd
+        index={3}
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="800px"
+      />
 
       {/* Testimonials */}
       <section className="py-20 bg-white">
@@ -311,6 +348,15 @@ export default async function HomePage({
           </div>
         </Container>
       </section>
+
+      {/* Bottom Banner Ad */}
+      <BottomBanner
+        show={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="1200px"
+        margin="my-8"
+      />
     </>
   );
 }
