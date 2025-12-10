@@ -2,41 +2,65 @@
 
 ### **Layout Components**
 
-* **Navbar.tsx** – Main navigation; responsive with dropdown menus.
-* **Footer.tsx** – Links to important pages, social icons.
-* **Sidebar.tsx** – (Future) For dashboard navigation.
+* **Navbar.tsx** – Main navigation with mobile menu; includes language switcher
+* **Footer.tsx** – Company information, legal links, and social media
+* **MainLayout.tsx** – Wrapper component combining Navbar and Footer
+* **Container.tsx** – Consistent spacing and max-width container
 
 ### **UI Components**
 
-* **Button.tsx** – Standard CTA buttons.
-* **Card.tsx** – Display match highlights, news items.
-* **Modal.tsx** – For pop-up content.
-* **Tabs.tsx** – Organize live matches/highlights.
-* **Accordion.tsx** – FAQs or expandable lists.
-* **SearchBar.tsx** – Search for matches, teams.
-* **Pagination.tsx** – Navigate through large lists.
-* **Loader.tsx** – Loading indicators.
-* **Toast.tsx** – Notifications.
-* **Tooltip.tsx** – Contextual hints.
-* **TextField.tsx** – Form input fields.
-* **Select.tsx** – Dropdown menus.
-* **Toggle.tsx** – Switches for preferences.
-* **FileUpload.tsx** – (Future) Upload profile pictures.
+* **Button.tsx** – Reusable button components with multiple variants (primary, secondary, outline)
+* **LocaleSwitcher.tsx** – Language selection component for international users
 
-### **Video Components**
+### **Monitoring Components**
 
-* **VideoPlayer.tsx** – Embed highlights/live streams.
+* **HealthCheck.tsx** – System health monitoring and status display
+* **AnalyticsTracker.tsx** – User interaction and analytics tracking
 
-### **Ads Components**
+### **Component Structure**
 
-* **AdSlot.tsx** – Google Ad Manager or custom ads integration.
+```
+components/
+├── layout-components/
+│   ├── Navbar.tsx          # Main navigation
+│   ├── Footer.tsx          # Page footer
+│   ├── MainLayout.tsx      # Layout wrapper
+│   └── Container.tsx       # Content container
+├── ui/
+│   └── Button.tsx          # Button components
+├── monitoring/
+│   ├── HealthCheck.tsx     # System monitoring
+│   └── AnalyticsTracker.tsx # Analytics tracking
+└── LocaleSwitcher.tsx      # Language switcher
+```
 
-### **Analytics Components**
+### **Component Usage**
 
-* **AnalyticsTracker.tsx** – Custom tracking for clicks, video plays, etc.
+**Layout Components:**
+- Used in all page layouts to provide consistent navigation and structure
+- Responsive design for mobile, tablet, and desktop devices
+- Internationalization support built-in
 
-### **Language Components**
+**UI Components:**
+- Button component supports multiple sizes and variants
+- Consistent styling across the application
 
-* **LanguageSelector.tsx** – Multi-language support.
+**Specialized Components:**
+- Monitoring components for system health and analytics
+- Language switcher for multi-language support
 
----
+### **Design Principles**
+
+1. **Simplicity** – Components are focused and do one thing well
+2. **Reusability** – Components are designed to be reused across the application
+3. **Accessibility** – All components follow accessibility best practices
+4. **Responsive** – Components work on all device sizes
+5. **Maintainable** – Clean, documented code that's easy to update
+
+### **Future Components**
+
+The current component set is minimal and focused on the business website needs. Future components could include:
+- Contact form components
+- Download tracking components
+- Newsletter subscription components
+- Testimonial display components

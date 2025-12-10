@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
@@ -23,7 +23,7 @@ export default function Contact() {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     if (mapRef.current) observer.observe(mapRef.current);
@@ -32,8 +32,8 @@ export default function Contact() {
   }, []);
 
   const inputClass = `
-    w-full border border-gray-300 rounded-md p-3 
-    focus:outline-none focus:ring-2 focus:ring-green-600 
+    w-full border border-gray-300 rounded-md p-3
+    focus:outline-none focus:ring-2 focus:ring-green-600
     transition-all duration-300
     hover:border-green-500
   `;
@@ -41,17 +41,22 @@ export default function Contact() {
   return (
     <section className="bg-gray-50 py-16">
       <div className="container mx-auto px-4 max-w-3xl space-y-12">
-
         {/* Header */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-extrabold text-gray-900">Contact Us</h1>
+          <h1 className="text-4xl font-extrabold text-gray-900">
+            Contact Goalkick Live
+          </h1>
           <p className="text-gray-600 text-lg">
-            Have questions or feedback? Fill out the form below or reach us via email, phone, or social media.
+            Have questions about our mobile app or business? Fill out the form
+            below or reach us via email, phone, or social media.
           </p>
         </div>
 
         {/* Contact Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-8 space-y-6 relative">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-xl shadow-md p-8 space-y-6 relative"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
@@ -82,7 +87,9 @@ export default function Contact() {
           {/* Animated Success Toast */}
           <div
             className={`absolute top-0 left-1/2 -translate-x-1/2 transform transition-all duration-500 ${
-              submitted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10 pointer-events-none"
+              submitted
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 -translate-y-10 pointer-events-none"
             } bg-green-100 text-green-800 rounded-md px-6 py-3 shadow-md text-center`}
           >
             Your message has been sent successfully!
@@ -91,25 +98,48 @@ export default function Contact() {
 
         {/* Contact Info */}
         <div className="bg-white rounded-xl shadow-md p-8 space-y-4 text-center">
-          <h2 className="text-2xl font-bold text-gray-900">Other Ways to Reach Us</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Other Ways to Reach Us
+          </h2>
           <p className="text-gray-600">
             Email:{" "}
-            <a href="mailto:contact@footballhighlight.com" className="text-green-600 hover:underline">
-              contact@footballhighlight.com
+            <a
+              href="mailto:contact@goalkicklive.com"
+              className="text-green-600 hover:underline"
+            >
+              contact@goalkicklive.com
             </a>
           </p>
           <p className="text-gray-600">
             Phone:{" "}
-            <a href="tel:+1234567890" className="text-green-600 hover:underline">
-              +1 (234) 567-890
+            <a
+              href="tel:+1234567890"
+              className="text-green-600 hover:underline"
+            >
+              +1 (555) 123-4567
             </a>
           </p>
           <p className="text-gray-600">
             Follow us on social media:{" "}
             <span className="ml-2 space-x-4">
-              <a href="#" className="text-green-600 hover:underline">Twitter</a>
-              <a href="#" className="text-green-600 hover:underline">Facebook</a>
-              <a href="#" className="text-green-600 hover:underline">Instagram</a>
+              <a
+                href="https://twitter.com/goalkicklive"
+                className="text-green-600 hover:underline"
+              >
+                Twitter
+              </a>
+              <a
+                href="https://facebook.com/goalkicklive"
+                className="text-green-600 hover:underline"
+              >
+                Facebook
+              </a>
+              <a
+                href="https://instagram.com/goalkicklive"
+                className="text-green-600 hover:underline"
+              >
+                Instagram
+              </a>
             </span>
           </p>
         </div>
@@ -131,7 +161,6 @@ export default function Contact() {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
-
       </div>
     </section>
   );

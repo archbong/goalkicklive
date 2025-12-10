@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useState } from 'react';
-import { Menu, X, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import LocaleSwitcher from '../LocaleSwitcher';
-import { Transition } from '@headlessui/react';
+import Link from "next/link";
+import { useState } from "react";
+import { Menu, X, Settings } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import LocaleSwitcher from "../LocaleSwitcher";
+import { Transition } from "@headlessui/react";
 
 interface NavbarProps {
   locale: string;
@@ -15,12 +15,10 @@ export default function Navbar({ locale }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: 'Home', href: `/${locale}` },
-    { name: 'Highlights', href: `/${locale}/highlights` },
-    { name: 'Blogs', href: `/${locale}/blogs` },
-    { name: 'Downloads', href: `/${locale}/downloads` },
-    { name: 'About', href: `/${locale}/about` },
-    { name: 'Contact', href: `/${locale}/contact` },
+    { name: "Home", href: `/${locale}` },
+    { name: "Downloads", href: `/${locale}/downloads` },
+    { name: "About", href: `/${locale}/about` },
+    { name: "Contact", href: `/${locale}/contact` },
   ];
 
   const renderNavLinks = (closeMenu?: () => void) =>
@@ -41,9 +39,12 @@ export default function Navbar({ locale }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 text-xl font-bold">
+          <Link
+            href="/"
+            className="flex items-center space-x-2 text-xl font-bold"
+          >
             <span className="w-6 h-6">⚽</span>
-            <span>Football Highlight</span>
+            <span>Goalkick Live</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -62,7 +63,11 @@ export default function Navbar({ locale }: NavbarProps) {
               aria-expanded={isOpen}
               className="p-2 rounded hover:bg-gray-800 transition-colors"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -79,7 +84,9 @@ export default function Navbar({ locale }: NavbarProps) {
         leaveTo="max-h-0 opacity-0 -translate-y-4"
       >
         <div className="md:hidden bg-black px-4 pb-4 overflow-hidden">
-          <ul className="space-y-2">{renderNavLinks(() => setIsOpen(false))}</ul>
+          <ul className="space-y-2">
+            {renderNavLinks(() => setIsOpen(false))}
+          </ul>
           <div className="mt-3 flex gap-2">
             <LocaleSwitcher />
             <Button variant="ghost" size="icon" aria-label="Settings">

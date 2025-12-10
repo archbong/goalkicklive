@@ -1,15 +1,19 @@
 // app/[locale]/layout.tsx
-import type { Metadata } from 'next';
-import { locales, type Locale } from '@/i18n/config';
-import MainLayout from '@/components/layout-components/MainLayout';
-import './globals.css';
+import type { Metadata } from "next";
+import { locales, type Locale } from "@/i18n/config";
+import MainLayout from "@/components/layout-components/MainLayout";
+import "./globals.css";
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
 // Fixed: Correctly destructure and use the 'locale' variable to prevent the warning and type error.
-export async function generateMetadata({ params }: { params: { locale: Locale } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: Locale };
+}): Promise<Metadata> {
   const { locale } = params;
   const languages = Object.fromEntries(locales.map((l) => [l, `/${l}`]));
 
@@ -18,10 +22,11 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
   console.log(`Generating metadata for locale: ${locale}`);
 
   return {
-    title: 'Football Highlight',
-    description: 'Watch the latest football highlights and read expert blogs.',
+    title: "Goalkick Live - Stream Live Football Matches",
+    description:
+      "Download our mobile app to stream live football matches from top leagues around the world. Never miss a moment of the action.",
     alternates: { languages },
-    metadataBase: new URL('https://goalkicklive.com'),
+    metadataBase: new URL("https://goalkicklive.com"),
   };
 }
 
