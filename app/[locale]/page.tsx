@@ -9,6 +9,7 @@ import {
   Globe,
   Download,
   Star,
+  ExternalLink,
 } from "lucide-react";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import type { Locale } from "@/i18n/config";
@@ -24,9 +25,12 @@ export default async function HomePage({
 
   return (
     <>
-      {/* Top Banner Ad */}
+      {/* Top Banner Ad - Now Closable! */}
       <TopBanner
         show={true}
+        closable={true}
+        closeButtonDelay={3}
+        showCloseLabel={true}
         network="placeholder"
         responsive={true}
         maxWidth="1200px"
@@ -357,6 +361,77 @@ export default async function HomePage({
         maxWidth="1200px"
         margin="my-8"
       />
+
+      {/* Closable Ad Feature Demo Section */}
+      <section className="py-12 bg-gray-50">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-4">
+              New Feature: Closable Ads
+            </h2>
+            <p className="text-xl text-gray-600 mb-6">
+              We&apos;ve improved our ad experience! Now users can close ads
+              they find annoying.
+            </p>
+
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="text-left flex-1">
+                  <h3 className="text-2xl font-semibold mb-3">Try it out</h3>
+                  <p className="text-gray-600 mb-4">
+                    The top banner on this page is now closable. Look for the X
+                    button in the top right corner!
+                  </p>
+                  <ul className="space-y-2 text-gray-600 mb-6">
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Click the X button to close annoying ads
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Close button appears after 3 seconds
+                    </li>
+                    <li className="flex items-center">
+                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      Works on all ad positions
+                    </li>
+                  </ul>
+                  <Link
+                    href={`/${locale}/examples/ads`}
+                    className="inline-flex items-center text-green-600 hover:text-green-700 font-medium"
+                  >
+                    View more examples
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </Link>
+                </div>
+                <div className="flex-1">
+                  <div className="bg-gray-100 rounded-lg p-4 border border-gray-200">
+                    <div className="text-sm text-gray-500 mb-2">
+                      Example Code:
+                    </div>
+                    <pre className="bg-gray-800 text-white p-4 rounded text-sm overflow-x-auto">
+                      {`<TopBanner
+  closable={true}
+  closeButtonDelay={3}
+  showCloseLabel={true}
+  onClose={() => {
+    // Track when users close ads
+    analytics.track(&apos;ad_closed&apos;);
+  }}
+/>`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-gray-500 text-sm">
+              We&apos;re committed to improving user experience while supporting
+              our free service.
+            </p>
+          </div>
+        </Container>
+      </section>
     </>
   );
 }

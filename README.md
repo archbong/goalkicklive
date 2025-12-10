@@ -79,7 +79,7 @@ The website includes comprehensive ad integration with the following features:
 ### **Ad Components**
 - **AdSlot**: Flexible ad component supporting multiple formats and networks
 - **AdManager**: Manages multiple ad placements with priority-based rendering
-- **AdBanner**: Pre-configured banner ads for common positions
+- **AdBanner**: Pre-configured banner ads for common positions with closable functionality
 - **BetweenContentAd**: Ads placed between content sections
 
 ### **Supported Ad Networks**
@@ -95,12 +95,34 @@ The website includes comprehensive ad integration with the following features:
 - **Mobile Banner** (320x100): Mobile-optimized ads
 - **Fluid**: Responsive ads that adapt to container size
 
+### **Closable Ad Feature**
+All ad banners now support user-closable functionality to improve user experience:
+- **closable** (boolean): Enable/disable close button (default: false)
+- **closeButtonDelay** (number): Seconds before close button appears (default: 0)
+- **showCloseLabel** (boolean): Show "Close ad" text label (default: false)
+- **onClose** (function): Callback when user closes the ad
+
+**Usage Examples:**
+```tsx
+// Basic closable banner
+<TopBanner closable={true} />
+
+// With delay and label
+<BottomBanner closable={true} closeButtonDelay={5} showCloseLabel={true} />
+
+// With tracking callback
+<InlineAd
+  closable={true}
+  onClose={() => analytics.track('ad_closed')}
+/>
+```
+
 ### **Ad Placements**
-- **Top Banner**: Above page header
-- **Between Content**: Strategically placed between content sections
-- **Bottom Banner**: Below page footer
-- **Sidebar Ads**: Right-hand sidebar placements (desktop only)
-- **Sticky Mobile Ads**: Bottom-sticky ads for mobile users
+- **Top Banner**: Above page header (now closable)
+- **Between Content**: Strategically placed between content sections (now closable)
+- **Bottom Banner**: Below page footer (now closable)
+- **Sidebar Ads**: Right-hand sidebar placements (desktop only) (now closable)
+- **Sticky Mobile Ads**: Bottom-sticky ads for mobile users (now closable)
 
 ### **Configuration**
 Ad settings are managed through environment variables and the `config/ads.ts` file:
