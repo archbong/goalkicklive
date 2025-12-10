@@ -1,12 +1,12 @@
 // goalkicklive/sentry.client.config.ts
-import * as Sentry from '@sentry/nextjs';
+import * as Sentry from "@sentry/nextjs";
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
 Sentry.init({
   dsn: SENTRY_DSN,
   environment: process.env.NODE_ENV,
-  enabled: process.env.NODE_ENV === 'production',
+  enabled: process.env.NODE_ENV === "production",
 
   // Performance Monitoring
   integrations: [
@@ -28,14 +28,18 @@ Sentry.init({
     // Ignore specific errors
     if (error instanceof Error) {
       // Ignore network errors
-      if (error.message.includes('Network Error') ||
-          error.message.includes('Failed to fetch')) {
+      if (
+        error.message.includes("Network Error") ||
+        error.message.includes("Failed to fetch")
+      ) {
         return null;
       }
 
       // Ignore common browser-specific errors
-      if (error.message.includes('ResizeObserver') ||
-          error.message.includes('canceled')) {
+      if (
+        error.message.includes("ResizeObserver") ||
+        error.message.includes("canceled")
+      ) {
         return null;
       }
     }

@@ -68,6 +68,12 @@ const nextConfig: NextConfig = {
               priority: 25,
               chunks: "all",
             },
+            sentry: {
+              test: /[\\/]node_modules[\\/](@sentry|@opentelemetry)[\\/]/,
+              name: "sentry",
+              priority: 22,
+              chunks: "all",
+            },
             utils: {
               test: /[\\/]node_modules[\\/](clsx|tailwind-merge|class-variance-authority)[\\/]/,
               name: "utils",

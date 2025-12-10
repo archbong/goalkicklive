@@ -127,7 +127,7 @@ export default async function About({
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {[
               {
-                name: "Samuel Archibong",
+                name: "Chris Val Obum",
                 role: "Founder & CEO",
                 bio: "Former sports technology executive with 15+ years in digital media",
               },
