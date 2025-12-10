@@ -2,11 +2,61 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
+import type { Locale } from "@/i18n/config";
 
-export default function Contact() {
+interface ContactPageProps {
+  params: Promise<{ locale: Locale }>;
+}
+
+interface Translations {
+  contactPage: {
+    title: string;
+    description: string;
+    name: string;
+    email: string;
+    message: string;
+    sendMessage: string;
+    messageSent: string;
+    otherWays: string;
+    followUs: string;
+  };
+  common: {
+    loading: string;
+  };
+}
+
+export default function Contact({ params }: ContactPageProps) {
+  const [currentLocale, setCurrentLocale] = useState<Locale>("en");
+  const [translations, setTranslations] = useState<Translations | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [mapVisible, setMapVisible] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
+
+  // Load locale and translations on client side
+  useEffect(() => {
+    const loadData = async () => {
+      const { locale: localeParam } = await params;
+      setCurrentLocale(localeParam);
+
+      // Dynamically import the translation file for the locale
+      try {
+        const dict = await import(`@/locales/${localeParam}/common.json`);
+        setTranslations({
+          contactPage: dict.default.contactPage,
+          common: dict.default.common,
+        });
+      } catch (error) {
+        console.error("Failed to load translations:", error);
+        // Fallback to English if translation fails
+        const dict = await import(`@/locales/en/common.json`);
+        setTranslations({
+          contactPage: dict.default.contactPage,
+          common: dict.default.common,
+        });
+      }
+    };
+    loadData();
+  }, [params]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,17 +88,27 @@ export default function Contact() {
     hover:border-green-500
   `;
 
+  // Show loading state while translations are being loaded
+  if (!translations) {
+    return (
+      <section className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4 max-w-3xl text-center">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-gray-50 py-16">
       <div className="container mx-auto px-4 max-w-3xl space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-extrabold text-gray-900">
-            Contact Goalkick Live
+            {translations.contactPage.title}
           </h1>
           <p className="text-gray-600 text-lg">
-            Have questions about our mobile app or business? Fill out the form
-            below or reach us via email, phone, or social media.
+            {translations.contactPage.description}
           </p>
         </div>
 
@@ -60,19 +120,19 @@ export default function Contact() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
-              placeholder="Your Name"
+              placeholder={translations.contactPage.name}
               required
               className={inputClass}
             />
             <input
               type="email"
-              placeholder="Your Email"
+              placeholder={translations.contactPage.email}
               required
               className={inputClass}
             />
           </div>
           <textarea
-            placeholder="Your Message"
+            placeholder={translations.contactPage.message}
             required
             rows={5}
             className={inputClass}
@@ -81,7 +141,7 @@ export default function Contact() {
             variant="default"
             className="w-full py-3 transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
           >
-            Send Message
+            {translations.contactPage.sendMessage}
           </Button>
 
           {/* Animated Success Toast */}
@@ -92,14 +152,14 @@ export default function Contact() {
                 : "opacity-0 -translate-y-10 pointer-events-none"
             } bg-green-100 text-green-800 rounded-md px-6 py-3 shadow-md text-center`}
           >
-            Your message has been sent successfully!
+            {translations.contactPage.messageSent}
           </div>
         </form>
 
         {/* Contact Info */}
         <div className="bg-white rounded-xl shadow-md p-8 space-y-4 text-center">
           <h2 className="text-2xl font-bold text-gray-900">
-            Other Ways to Reach Us
+            {translations.contactPage.otherWays}
           </h2>
           <p className="text-gray-600">
             Email:{" "}
@@ -120,7 +180,7 @@ export default function Contact() {
             </a>
           </p>
           <p className="text-gray-600">
-            Follow us on social media:{" "}
+            {translations.contactPage.followUs}{" "}
             <span className="ml-2 space-x-4">
               <a
                 href="https://twitter.com/goalkicklive"

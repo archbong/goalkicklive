@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "downloads": "Téléchargements",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Regardez les matchs de football en direct",
+    "subtitle": "Sur votre mobile",
+    "description": "Profitez de la diffusion en direct des matchs, des scores en temps réel et du contenu exclusif avec notre application mobile dédiée. Ne manquez jamais un moment de l'action.",
+    "downloadButton": "Télécharger maintenant",
+    "learnMoreButton": "En savoir plus"
+  },
+  "features": {
+    "title": "Pourquoi choisir Goalkick Live ?",
+    "subtitle": "Notre application mobile offre l'expérience ultime de streaming footballistique",
+    "liveStreaming": {
+      "title": "Diffusion en direct des matchs",
+      "description": "Regardez les matchs de football en direct des meilleurs championats du monde en qualité HD."
+    },
+    "mobileOptimized": {
+      "title": "Optimisé pour mobile",
+      "description": "Conçu spécifiquement pour les appareils mobiles avec des commandes intuitives et une lecture fluide."
+    },
+    "globalCoverage": {
+      "title": "Couverture mondiale",
+      "description": "Accédez aux matchs de Premier League, La Liga, Serie A, Bundesliga, et plus encore."
+    },
+    "realTimeUpdates": {
+      "title": "Mises à jour en temps réel",
+      "description": "Obtenez les scores en direct, les statistiques des matchs et des notifications instantanées pour les buts et événements."
+    },
+    "secureReliable": {
+      "title": "Sécurisé et fiable",
+      "description": "Profitez d'un streaming sécurisé avec un minimum de buffering et une garantie de disponibilité de 99,9 %."
+    },
+    "freeDownload": {
+      "title": "Téléchargement gratuit",
+      "description": "Téléchargez l'application gratuitement sans frais cachés. Disponible sur iOS et Android."
+    }
+  },
+  "downloadCta": {
+    "title": "Prêt à regarder le football en direct ?",
+    "description": "Téléchargez Goalkick Live maintenant et ne manquez plus jamais un match",
+    "appStore": "Télécharger sur l'App Store",
+    "playStore": "Disponible sur Google Play",
+    "availability": "Disponible pour iOS 12+ et Android 8+"
+  },
+  "testimonials": {
+    "title": "Ce que disent nos utilisateurs",
+    "subtitle": "Rejoignez des milliers de fans de football qui adorent notre application",
+    "testimonial1": {
+      "name": "Jean D.",
+      "role": "Fan de football",
+      "quote": "La meilleure application de streaming footballistique que j'ai utilisée. Qualité cristalline et jamais de buffering pendant les moments cruciaux !"
+    },
+    "testimonial2": {
+      "name": "Marie S.",
+      "role": "Détentrice d'abonnement",
+      "quote": "Quand je ne peux pas aller au stade, cette application est mon choix. Les statistiques en temps réel sont incroyablement détaillées."
+    },
+    "testimonial3": {
+      "name": "Ahmed R.",
+      "role": "Journaliste sportif",
+      "quote": "Essentiel pour mon travail. La couverture mondiale signifie que je peux suivre n'importe quel championat depuis n'importe où dans le monde."
+    }
+  },
+  "downloadsPage": {
+    "title": "Télécharger Goalkick Live",
+    "description": "Obtenez notre application mobile pour regarder les matchs de football en direct des meilleurs championats du monde. Disponible gratuitement sur iOS et Android.",
+    "availableDevices": "Disponible sur tous les appareils",
+    "availableDescription": "Téléchargez l'application sur votre plateforme préférée et commencez à regarder les matchs de football en direct dès aujourd'hui.",
+    "scanToDownload": "Scanner pour télécharger",
+    "scanDescription": "Scannez ce code QR avec votre appareil mobile pour télécharger l'application directement.",
+    "appFeatures": "Fonctionnalités de l'application",
+    "systemRequirements": "Configuration système requise",
+    "ios": "iOS",
+    "android": "Android",
+    "needHelp": "Besoin d'aide ?",
+    "helpDescription": "Si vous rencontrez des problèmes pour télécharger ou installer l'application, veuillez contacter notre équipe d'assistance.",
+    "contactSupport": "Contacter le support",
+    "learnMore": "En savoir plus"
+  },
+  "aboutPage": {
+    "title": "À propos de Goalkick Live",
+    "description": "Nous sommes une entreprise technologique dédiée à la diffusion de matchs de football en direct sur les appareils mobiles dans le monde entier. Notre mission est de rendre le football accessible à tous, partout.",
+    "mission": {
+      "title": "Notre mission",
+      "description": "Offrir aux fans de football une expérience de streaming mobile fluide et de haute qualité qui leur permet de regarder les matchs en direct des meilleurs championats du monde, où qu'ils soient."
+    },
+    "vision": {
+      "title": "Notre vision",
+      "description": "Devenir la principale plateforme mobile pour le streaming de football en direct, connectant des millions de fans avec leurs équipes préférées et créant une communauté mondiale d'enthousiastes du football."
+    },
+    "whatWeOffer": {
+      "title": "Ce que nous offrons",
+      "description": "Notre application mobile offre une expérience exceptionnelle de streaming footballistique avec des fonctionnalités conçues pour les vrais fans."
+    },
+    "ourLeadership": {
+      "title": "Notre direction",
+      "description": "Notre équipe combine une expertise en technologie sportive, infrastructure de streaming et développement mobile."
+    },
+    "readyToStream": "Prêt à regarder le football en direct ?",
+    "downloadApp": "Télécharger l'application",
+    "contactUs": "Nous contacter"
+  },
+  "contactPage": {
+    "title": "Contacter Goalkick Live",
+    "description": "Des questions sur notre application mobile ou notre entreprise ? Remplissez le formulaire ci-dessous ou contactez-nous par email, téléphone ou réseaux sociaux.",
+    "name": "Votre nom",
+    "email": "Votre email",
+    "message": "Votre message",
+    "sendMessage": "Envoyer le message",
+    "messageSent": "Votre message a été envoyé avec succès !",
+    "otherWays": "Autres moyens de nous contacter",
+    "followUs": "Suivez-nous sur les réseaux sociaux :"
+  },
+  "footer": {
+    "copyright": "Goalkick Live. Tous droits réservés.",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsConditions": "Conditions générales",
+    "settings": "Paramètres"
+  },
+  "common": {
+    "viewAll": "Voir tout →",
+    "readMore": "Lire la suite",
+    "watch": "Regarder",
+    "subscribe": "S'abonner",
+    "followUs": "Nous suivre",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "success": "Succès"
+  }
+}

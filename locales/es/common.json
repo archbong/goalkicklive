@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "downloads": "Descargas",
+    "about": "Acerca de",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "title": "Transmite partidos de fútbol en vivo",
+    "subtitle": "En tu móvil",
+    "description": "Experimenta transmisiones en vivo de partidos, resultados en tiempo real y contenido exclusivo con nuestra aplicación móvil dedicada. No te pierdas ni un momento de la acción.",
+    "downloadButton": "Descargar ahora",
+    "learnMoreButton": "Más información"
+  },
+  "features": {
+    "title": "¿Por qué elegir Goalkick Live?",
+    "subtitle": "Nuestra aplicación móvil ofrece la mejor experiencia de transmisión de fútbol",
+    "liveStreaming": {
+      "title": "Transmisión en vivo de partidos",
+      "description": "Mira partidos de fútbol en vivo de las mejores ligas del mundo en calidad HD."
+    },
+    "mobileOptimized": {
+      "title": "Optimizado para móviles",
+      "description": "Diseñado específicamente para dispositivos móviles con controles intuitivos y reproducción fluida."
+    },
+    "globalCoverage": {
+      "title": "Cobertura global",
+      "description": "Accede a partidos de la Premier League, La Liga, Serie A, Bundesliga y más."
+    },
+    "realTimeUpdates": {
+      "title": "Actualizaciones en tiempo real",
+      "description": "Obtén resultados en vivo, estadísticas de partidos y notificaciones instantáneas para goles y eventos."
+    },
+    "secureReliable": {
+      "title": "Seguro y confiable",
+      "description": "Disfruta de transmisiones seguras con mínimo buffering y garantía de disponibilidad del 99.9%."
+    },
+    "freeDownload": {
+      "title": "Descarga gratuita",
+      "description": "Descarga la aplicación gratis sin cargos ocultos. Disponible en iOS y Android."
+    }
+  },
+  "downloadCta": {
+    "title": "¿Listo para ver fútbol en vivo?",
+    "description": "Descarga Goalkick Live ahora y nunca te pierdas un partido",
+    "appStore": "Descargar en App Store",
+    "playStore": "Disponible en Google Play",
+    "availability": "Disponible para iOS 12+ y Android 8+"
+  },
+  "testimonials": {
+    "title": "Lo que dicen nuestros usuarios",
+    "subtitle": "Únete a miles de fanáticos del fútbol que aman nuestra aplicación",
+    "testimonial1": {
+      "name": "Juan D.",
+      "role": "Fanático del fútbol",
+      "quote": "¡La mejor aplicación de transmisión de fútbol que he usado! Calidad cristalina y nunca se congela durante los momentos cruciales."
+    },
+    "testimonial2": {
+      "name": "María S.",
+      "role": "Abonada de temporada",
+      "quote": "Cuando no puedo ir al estadio, esta aplicación es mi opción. Las estadísticas en tiempo real son increíblemente detalladas."
+    },
+    "testimonial3": {
+      "name": "Ahmed R.",
+      "role": "Periodista deportivo",
+      "quote": "Esencial para mi trabajo. La cobertura global significa que puedo seguir cualquier liga desde cualquier parte del mundo."
+    }
+  },
+  "downloadsPage": {
+    "title": "Descargar Goalkick Live",
+    "description": "Obtén nuestra aplicación móvil para transmitir partidos de fútbol en vivo de las mejores ligas del mundo. Disponible gratis en iOS y Android.",
+    "availableDevices": "Disponible en todos los dispositivos",
+    "availableDescription": "Descarga la aplicación en tu plataforma preferida y comienza a ver partidos de fútbol en vivo hoy mismo.",
+    "scanToDownload": "Escanear para descargar",
+    "scanDescription": "Escanea este código QR con tu dispositivo móvil para descargar la aplicación directamente.",
+    "appFeatures": "Características de la aplicación",
+    "systemRequirements": "Requisitos del sistema",
+    "ios": "iOS",
+    "android": "Android",
+    "needHelp": "¿Necesitas ayuda?",
+    "helpDescription": "Si encuentras problemas al descargar o instalar la aplicación, por favor contacta a nuestro equipo de soporte.",
+    "contactSupport": "Contactar soporte",
+    "learnMore": "Más información"
+  },
+  "aboutPage": {
+    "title": "Acerca de Goalkick Live",
+    "description": "Somos una empresa tecnológica dedicada a llevar transmisiones en vivo de partidos de fútbol a dispositivos móviles en todo el mundo. Nuestra misión es hacer el fútbol accesible para todos, en todas partes.",
+    "mission": {
+      "title": "Nuestra misión",
+      "description": "Proporcionar a los fanáticos del fútbol una experiencia de transmisión móvil fluida y de alta calidad que les permita ver partidos en vivo de las mejores ligas del mundo, sin importar dónde se encuentren."
+    },
+    "vision": {
+      "title": "Nuestra visión",
+      "description": "Convertirnos en la principal plataforma móvil para transmisiones de fútbol en vivo, conectando a millones de fanáticos con sus equipos favoritos y creando una comunidad global de entusiastas del fútbol."
+    },
+    "whatWeOffer": {
+      "title": "Lo que ofrecemos",
+      "description": "Nuestra aplicación móvil ofrece una experiencia excepcional de transmisión de fútbol con características diseñadas para verdaderos fanáticos."
+    },
+    "ourLeadership": {
+      "title": "Nuestro liderazgo",
+      "description": "Nuestro equipo combina experiencia en tecnología deportiva, infraestructura de streaming y desarrollo móvil."
+    },
+    "readyToStream": "¿Listo para ver fútbol en vivo?",
+    "downloadApp": "Descargar la aplicación",
+    "contactUs": "Contáctanos"
+  },
+  "contactPage": {
+    "title": "Contactar Goalkick Live",
+    "description": "¿Tienes preguntas sobre nuestra aplicación móvil o negocio? Completa el formulario a continuación o contáctanos por correo electrónico, teléfono o redes sociales.",
+    "name": "Tu nombre",
+    "email": "Tu correo electrónico",
+    "message": "Tu mensaje",
+    "sendMessage": "Enviar mensaje",
+    "messageSent": "¡Tu mensaje ha sido enviado con éxito!",
+    "otherWays": "Otras formas de contactarnos",
+    "followUs": "Síguenos en redes sociales:"
+  },
+  "footer": {
+    "copyright": "Goalkick Live. Todos los derechos reservados.",
+    "privacyPolicy": "Política de privacidad",
+    "termsConditions": "Términos y condiciones",
+    "settings": "Configuración"
+  },
+  "common": {
+    "viewAll": "Ver todo →",
+    "readMore": "Leer más",
+    "watch": "Ver",
+    "subscribe": "Suscribirse",
+    "followUs": "Seguirnos",
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "success": "Éxito"
+  }
+}

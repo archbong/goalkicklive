@@ -1,85 +1,84 @@
-import Link from "next/link";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+import type { Locale } from "@/i18n/config";
 
-export default function About() {
+export default async function About({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const dict = await getDictionary(locale);
+
   return (
     <section className="bg-gray-50 py-16">
       <div className="container mx-auto px-4 space-y-12">
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto space-y-4">
           <h1 className="text-4xl font-extrabold text-gray-900">
-            About Goalkick Live
+            {dict.aboutPage.title}
           </h1>
-          <p className="text-gray-600 text-lg">
-            We are a technology company dedicated to bringing live football
-            match streaming to mobile devices worldwide. Our mission is to make
-            football accessible to everyone, everywhere.
-          </p>
+          <p className="text-gray-600 text-lg">{dict.aboutPage.description}</p>
         </div>
 
         {/* Mission & Vision */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-900">Our Mission</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              {dict.aboutPage.mission.title}
+            </h2>
             <p className="text-gray-700 leading-relaxed">
-              To provide football fans with a seamless, high-quality mobile
-              streaming experience that allows them to watch live matches from
-              top leagues around the world, no matter where they are.
+              {dict.aboutPage.mission.description}
             </p>
           </div>
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-900">Our Vision</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              {dict.aboutPage.vision.title}
+            </h2>
             <p className="text-gray-700 leading-relaxed">
-              To become the leading mobile platform for live football streaming,
-              connecting millions of fans with their favorite teams and creating
-              a global community of football enthusiasts.
+              {dict.aboutPage.vision.description}
             </p>
           </div>
         </div>
 
         {/* What We Offer */}
         <div className="space-y-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900">What We Offer</h2>
+          <h2 className="text-3xl font-bold text-gray-900">
+            {dict.aboutPage.whatWeOffer.title}
+          </h2>
           <p className="text-gray-600 max-w-xl mx-auto">
-            Our mobile app delivers an exceptional football streaming experience
-            with features designed for true fans.
+            {dict.aboutPage.whatWeOffer.description}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Live Streaming",
-                description:
-                  "HD quality live matches from Premier League, La Liga, Serie A, Bundesliga, and more",
+                title: dict.features.liveStreaming.title,
+                description: dict.features.liveStreaming.description,
                 icon: "📺",
               },
               {
-                title: "Mobile First",
-                description:
-                  "Optimized specifically for mobile devices with intuitive controls and smooth playback",
+                title: dict.features.mobileOptimized.title,
+                description: dict.features.mobileOptimized.description,
                 icon: "📱",
               },
               {
-                title: "Real-time Updates",
-                description:
-                  "Live scores, match statistics, and instant notifications for goals and key events",
+                title: dict.features.realTimeUpdates.title,
+                description: dict.features.realTimeUpdates.description,
                 icon: "⚡",
               },
               {
-                title: "Global Coverage",
-                description:
-                  "Access matches from leagues worldwide, available in multiple languages",
+                title: dict.features.globalCoverage.title,
+                description: dict.features.globalCoverage.description,
                 icon: "🌍",
               },
               {
-                title: "Secure Platform",
-                description:
-                  "Reliable streaming with minimal buffering and 99.9% uptime guarantee",
+                title: dict.features.secureReliable.title,
+                description: dict.features.secureReliable.description,
                 icon: "🔒",
               },
               {
-                title: "Free Access",
-                description:
-                  "Download for free on iOS and Android with no hidden fees",
+                title: dict.features.freeDownload.title,
+                description: dict.features.freeDownload.description,
                 icon: "🎯",
               },
             ].map((feature) => (
@@ -99,10 +98,11 @@ export default function About() {
 
         {/* Team Section */}
         <div className="space-y-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Our Leadership</h2>
+          <h2 className="text-3xl font-bold text-gray-900">
+            {dict.aboutPage.ourLeadership.title}
+          </h2>
           <p className="text-gray-600 max-w-xl mx-auto">
-            Our team combines expertise in sports technology, streaming
-            infrastructure, and mobile development.
+            {dict.aboutPage.ourLeadership.description}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -146,24 +146,22 @@ export default function About() {
         {/* Call to Action */}
         <div className="text-center pt-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Ready to Stream Live Football?
+            {dict.aboutPage.readyToStream}
           </h2>
-          <p className="text-gray-600 mb-6">
-            Download our mobile app today and never miss a match again.
-          </p>
+          <p className="text-gray-600 mb-6">{dict.downloadCta.description}</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              href="/downloads"
+            <a
+              href={`/${locale}/downloads`}
               className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
             >
-              Download the App
-            </Link>
-            <Link
-              href="/contact"
+              {dict.aboutPage.downloadApp}
+            </a>
+            <a
+              href={`/${locale}/contact`}
               className="px-8 py-3 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium"
             >
-              Contact Us
-            </Link>
+              {dict.aboutPage.contactUs}
+            </a>
           </div>
         </div>
       </div>

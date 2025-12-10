@@ -1,9 +1,9 @@
 // middleware.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import Negotiator from 'negotiator';
-import { match as matchLocale } from '@formatjs/intl-localematcher';
-import { locales, defaultLocale } from './i18n/config';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import Negotiator from "negotiator";
+import { match as matchLocale } from "@formatjs/intl-localematcher";
+import { locales, defaultLocale } from "./i18n/config";
 
 function getLocale(request: NextRequest): string {
   const negotiatorHeaders: Record<string, string> = {};
@@ -17,23 +17,40 @@ export function middleware(request: NextRequest) {
 
   // Skip next internals, files, and APIs
   if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.includes('.')
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.includes(".") || // Skip any path with a dot (files with extensions)
+    pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/sitemap.xml") ||
+    pathname.startsWith("/robots.txt")
   ) {
-    return;
+    return NextResponse.next();
   }
 
-  // Already has a locale?
-  const hasLocale = locales.some(
-    (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`)
+  // Check if the pathname matches any locale exactly
+  const pathnameHasLocale = locales.some(
+    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
-  if (hasLocale) return;
 
+  if (pathnameHasLocale) {
+    return NextResponse.next();
+  }
+
+  // Redirect to locale-prefixed URL
   const locale = getLocale(request);
-  return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
+  request.nextUrl.pathname = `/${locale}${pathname}`;
+  return NextResponse.redirect(request.nextUrl);
 }
 
 export const config = {
-  matcher: ['/((?!_next|.*\\..*|api).*)'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder files
+     */
+    "/((?!_next/static|_next/image|favicon.ico|public/).*)",
+  ],
 };

@@ -2,19 +2,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Apple, QrCode, Smartphone } from "lucide-react";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+import type { Locale } from "@/i18n/config";
 
-export default function Downloads() {
+export default async function Downloads({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const dict = await getDictionary(locale);
+
   return (
     <section className="bg-gray-50 py-16">
       <div className="container mx-auto px-4 space-y-16">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-6">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-            Download Goalkick Live
+            {dict.downloadsPage.title}
           </h1>
           <p className="text-gray-600 text-lg md:text-xl">
-            Get our mobile app to stream live football matches from top leagues
-            around the world. Available for free on iOS and Android.
+            {dict.downloadsPage.description}
           </p>
         </div>
 
@@ -38,11 +46,10 @@ export default function Downloads() {
           <div className="space-y-8">
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900">
-                Available on All Devices
+                {dict.downloadsPage.availableDevices}
               </h2>
               <p className="text-gray-600">
-                Download the app on your preferred platform and start streaming
-                live football matches today.
+                {dict.downloadsPage.availableDescription}
               </p>
             </div>
 
@@ -76,12 +83,11 @@ export default function Downloads() {
               <div className="flex items-center gap-3">
                 <QrCode className="h-6 w-6 text-green-600" />
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Scan to Download
+                  {dict.downloadsPage.scanToDownload}
                 </h3>
               </div>
               <p className="text-gray-600 text-sm">
-                Scan this QR code with your mobile device to download the app
-                directly.
+                {dict.downloadsPage.scanDescription}
               </p>
               <div className="flex justify-center p-4 bg-gray-100 rounded-lg">
                 <div className="w-48 h-48 bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center rounded-lg">
@@ -98,29 +104,29 @@ export default function Downloads() {
         {/* Features Section */}
         <div className="space-y-8">
           <h2 className="text-3xl font-bold text-gray-900 text-center">
-            App Features
+            {dict.downloadsPage.appFeatures}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 icon: "📺",
-                title: "Live Streaming",
-                description: "HD quality live matches from top leagues",
+                title: dict.features.liveStreaming.title,
+                description: dict.features.liveStreaming.description,
               },
               {
                 icon: "📱",
-                title: "Mobile Optimized",
-                description: "Designed specifically for mobile devices",
+                title: dict.features.mobileOptimized.title,
+                description: dict.features.mobileOptimized.description,
               },
               {
                 icon: "⚡",
-                title: "Real-time Updates",
-                description: "Live scores and instant notifications",
+                title: dict.features.realTimeUpdates.title,
+                description: dict.features.realTimeUpdates.description,
               },
               {
                 icon: "🌍",
-                title: "Global Coverage",
-                description: "Matches from leagues worldwide",
+                title: dict.features.globalCoverage.title,
+                description: dict.features.globalCoverage.description,
               },
             ].map((feature) => (
               <div
@@ -141,13 +147,15 @@ export default function Downloads() {
         <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <h2 className="text-2xl font-bold text-gray-900">
-              System Requirements
+              {dict.downloadsPage.systemRequirements}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <Apple className="h-8 w-8 text-gray-700" />
-                  <h3 className="text-lg font-semibold text-gray-900">iOS</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {dict.downloadsPage.ios}
+                  </h3>
                 </div>
                 <ul className="text-gray-600 space-y-2 text-left">
                   <li>• iOS 12.0 or later</li>
@@ -160,7 +168,7 @@ export default function Downloads() {
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <Smartphone className="h-8 w-8 text-gray-700" />
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Android
+                    {dict.downloadsPage.android}
                   </h3>
                 </div>
                 <ul className="text-gray-600 space-y-2 text-left">
@@ -176,17 +184,22 @@ export default function Downloads() {
 
         {/* Support Section */}
         <div className="text-center space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">Need Help?</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {dict.downloadsPage.needHelp}
+          </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            If you encounter any issues downloading or installing the app,
-            please contact our support team for assistance.
+            {dict.downloadsPage.helpDescription}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="default" className="px-8">
-              <Link href="/contact">Contact Support</Link>
+              <Link href={`/${locale}/contact`}>
+                {dict.downloadsPage.contactSupport}
+              </Link>
             </Button>
             <Button variant="secondary" className="px-8">
-              <Link href="/about">Learn More</Link>
+              <Link href={`/${locale}/about`}>
+                {dict.downloadsPage.learnMore}
+              </Link>
             </Button>
           </div>
         </div>

@@ -4,9 +4,17 @@ import { Facebook, Twitter, Instagram } from "react-feather";
 
 interface FooterProps {
   locale: string;
+  translations: {
+    footer: {
+      copyright: string;
+      privacyPolicy: string;
+      termsConditions: string;
+      settings: string;
+    };
+  };
 }
 
-export default function Footer({ locale }: FooterProps) {
+export default function Footer({ locale, translations }: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
@@ -18,7 +26,7 @@ export default function Footer({ locale }: FooterProps) {
             ⚽ Goalkick Live
           </p>
           <p className="text-xs text-gray-500">
-            &copy; {year} Goalkick Live. All rights reserved.
+            &copy; {year} {translations.footer.copyright}
           </p>
         </div>
 
@@ -53,19 +61,19 @@ export default function Footer({ locale }: FooterProps) {
             href={`/${locale}/privacy-policy`}
             className="hover:text-white transition-colors"
           >
-            Privacy Policy
+            {translations.footer.privacyPolicy}
           </Link>
           <Link
             href={`/${locale}/terms-and-conditions`}
             className="hover:text-white transition-colors"
           >
-            Terms & Conditions
+            {translations.footer.termsConditions}
           </Link>
           <Link
             href={`/${locale}/settings`}
             className="hover:text-white transition-colors"
           >
-            Settings
+            {translations.footer.settings}
           </Link>
         </div>
       </Container>

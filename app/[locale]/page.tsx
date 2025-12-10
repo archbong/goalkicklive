@@ -10,8 +10,17 @@ import {
   Download,
   Star,
 } from "lucide-react";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+import type { Locale } from "@/i18n/config";
 
-export default async function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const dict = await getDictionary(locale);
+
   return (
     <>
       {/* Hero Section */}
@@ -19,13 +28,13 @@ export default async function HomePage() {
         <Container className="flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1">
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-              Stream Live Football Matches
-              <span className="block text-green-500 mt-2">On Your Mobile</span>
+              {dict.hero.title}
+              <span className="block text-green-500 mt-2">
+                {dict.hero.subtitle}
+              </span>
             </h1>
             <p className="text-xl mb-8 text-gray-300 max-w-2xl">
-              Experience live match streaming, real-time scores, and exclusive
-              content with our dedicated mobile app. Never miss a moment of the
-              action.
+              {dict.hero.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
@@ -33,7 +42,9 @@ export default async function HomePage() {
                 className="bg-green-600 hover:bg-green-700 shadow-lg"
               >
                 <Download className="mr-2 h-5 w-5" />
-                <Link href="/downloads">Download Now</Link>
+                <Link href={`/${locale}/downloads`}>
+                  {dict.hero.downloadButton}
+                </Link>
               </Button>
               <Button
                 size="lg"
@@ -41,7 +52,9 @@ export default async function HomePage() {
                 className="border-white text-white hover:bg-white/10"
               >
                 <PlayCircle className="mr-2 h-5 w-5" />
-                <Link href="/about">Learn More</Link>
+                <Link href={`/${locale}/about`}>
+                  {dict.hero.learnMoreButton}
+                </Link>
               </Button>
             </div>
           </div>
@@ -69,10 +82,10 @@ export default async function HomePage() {
         <Container>
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Goalkick Live?
+              {dict.features.title}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Our mobile app delivers the ultimate football streaming experience
+              {dict.features.subtitle}
             </p>
           </div>
 
@@ -82,11 +95,10 @@ export default async function HomePage() {
                 <PlayCircle className="h-8 w-8 text-green-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Live Match Streaming
+                {dict.features.liveStreaming.title}
               </h3>
               <p className="text-gray-600">
-                Watch live football matches from top leagues around the world in
-                HD quality.
+                {dict.features.liveStreaming.description}
               </p>
             </div>
 
@@ -95,11 +107,10 @@ export default async function HomePage() {
                 <Smartphone className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Mobile Optimized
+                {dict.features.mobileOptimized.title}
               </h3>
               <p className="text-gray-600">
-                Designed specifically for mobile devices with intuitive controls
-                and smooth playback.
+                {dict.features.mobileOptimized.description}
               </p>
             </div>
 
@@ -108,11 +119,10 @@ export default async function HomePage() {
                 <Globe className="h-8 w-8 text-purple-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Global Coverage
+                {dict.features.globalCoverage.title}
               </h3>
               <p className="text-gray-600">
-                Access matches from Premier League, La Liga, Serie A,
-                Bundesliga, and more.
+                {dict.features.globalCoverage.description}
               </p>
             </div>
 
@@ -121,11 +131,10 @@ export default async function HomePage() {
                 <Star className="h-8 w-8 text-yellow-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Real-time Updates
+                {dict.features.realTimeUpdates.title}
               </h3>
               <p className="text-gray-600">
-                Get live scores, match statistics, and instant notifications for
-                goals and events.
+                {dict.features.realTimeUpdates.description}
               </p>
             </div>
 
@@ -134,11 +143,10 @@ export default async function HomePage() {
                 <Shield className="h-8 w-8 text-red-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Secure & Reliable
+                {dict.features.secureReliable.title}
               </h3>
               <p className="text-gray-600">
-                Enjoy secure streaming with minimal buffering and 99.9% uptime
-                guarantee.
+                {dict.features.secureReliable.description}
               </p>
             </div>
 
@@ -147,11 +155,10 @@ export default async function HomePage() {
                 <Download className="h-8 w-8 text-indigo-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Free Download
+                {dict.features.freeDownload.title}
               </h3>
               <p className="text-gray-600">
-                Download the app for free with no hidden fees. Available on iOS
-                and Android.
+                {dict.features.freeDownload.description}
               </p>
             </div>
           </div>
@@ -162,10 +169,10 @@ export default async function HomePage() {
       <section className="py-20 bg-gradient-to-r from-green-600 to-blue-600 text-white">
         <Container className="text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Stream Live Football?
+            {dict.downloadCta.title}
           </h2>
           <p className="text-xl mb-10 max-w-2xl mx-auto">
-            Download Goalkick Live now and never miss a match again
+            {dict.downloadCta.description}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -180,7 +187,9 @@ export default async function HomePage() {
                 height={24}
                 className="mr-3"
               />
-              <Link href="/downloads">Download on the App Store</Link>
+              <Link href={`/${locale}/downloads`}>
+                {dict.downloadCta.appStore}
+              </Link>
             </Button>
 
             <Button
@@ -194,12 +203,14 @@ export default async function HomePage() {
                 height={24}
                 className="mr-3"
               />
-              <Link href="/downloads">Get it on Google Play</Link>
+              <Link href={`/${locale}/downloads`}>
+                {dict.downloadCta.playStore}
+              </Link>
             </Button>
           </div>
 
           <p className="mt-8 text-sm text-white/80">
-            Available for iOS 12+ and Android 8+
+            {dict.downloadCta.availability}
           </p>
         </Container>
       </section>
@@ -209,10 +220,10 @@ export default async function HomePage() {
         <Container>
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              What Our Users Say
+              {dict.testimonials.title}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Join thousands of football fans who love our app
+              {dict.testimonials.subtitle}
             </p>
           </div>
 
@@ -223,13 +234,16 @@ export default async function HomePage() {
                   <span className="text-green-600 font-bold">JD</span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">John D.</h4>
-                  <p className="text-sm text-gray-500">Football Fan</p>
+                  <h4 className="font-bold text-gray-900">
+                    {dict.testimonials.testimonial1.name}
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    {dict.testimonials.testimonial1.role}
+                  </p>
                 </div>
               </div>
               <p className="text-gray-700 italic">
-                &quot;The best football streaming app I&apos;ve used. Crystal
-                clear quality and never buffers during crucial moments!&quot;
+                &quot;{dict.testimonials.testimonial1.quote}&quot;
               </p>
               <div className="flex mt-4">
                 {[...Array(5)].map((_, i) => (
@@ -247,13 +261,16 @@ export default async function HomePage() {
                   <span className="text-blue-600 font-bold">MS</span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">Maria S.</h4>
-                  <p className="text-sm text-gray-500">Season Ticket Holder</p>
+                  <h4 className="font-bold text-gray-900">
+                    {dict.testimonials.testimonial2.name}
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    {dict.testimonials.testimonial2.role}
+                  </p>
                 </div>
               </div>
               <p className="text-gray-700 italic">
-                &quot;When I can&apos;t make it to the stadium, this app is my
-                go-to. The real-time stats are incredibly detailed.&quot;
+                &quot;{dict.testimonials.testimonial2.quote}&quot;
               </p>
               <div className="flex mt-4">
                 {[...Array(5)].map((_, i) => (
@@ -271,13 +288,16 @@ export default async function HomePage() {
                   <span className="text-purple-600 font-bold">AR</span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">Ahmed R.</h4>
-                  <p className="text-sm text-gray-500">Sports Journalist</p>
+                  <h4 className="font-bold text-gray-900">
+                    {dict.testimonials.testimonial3.name}
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    {dict.testimonials.testimonial3.role}
+                  </p>
                 </div>
               </div>
               <p className="text-gray-700 italic">
-                &quot;Essential for my work. The global coverage means I can
-                follow any league from anywhere in the world.&quot;
+                &quot;{dict.testimonials.testimonial3.quote}&quot;
               </p>
               <div className="flex mt-4">
                 {[...Array(5)].map((_, i) => (

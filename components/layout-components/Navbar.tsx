@@ -9,16 +9,24 @@ import { Transition } from "@headlessui/react";
 
 interface NavbarProps {
   locale: string;
+  translations: {
+    nav: {
+      home: string;
+      downloads: string;
+      about: string;
+      contact: string;
+    };
+  };
 }
 
-export default function Navbar({ locale }: NavbarProps) {
+export default function Navbar({ locale, translations }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: "Home", href: `/${locale}` },
-    { name: "Downloads", href: `/${locale}/downloads` },
-    { name: "About", href: `/${locale}/about` },
-    { name: "Contact", href: `/${locale}/contact` },
+    { name: translations.nav.home, href: `/${locale}` },
+    { name: translations.nav.downloads, href: `/${locale}/downloads` },
+    { name: translations.nav.about, href: `/${locale}/about` },
+    { name: translations.nav.contact, href: `/${locale}/contact` },
   ];
 
   const renderNavLinks = (closeMenu?: () => void) =>
