@@ -13,10 +13,11 @@ import Link from "next/link";
 export default async function AdTestPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  await getDictionary(locale);
+  const localeTyped = locale as Locale;
+  await getDictionary(localeTyped);
 
   return (
     <Container className="py-8 max-w-4xl mx-auto">

@@ -24,11 +24,10 @@ import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
 export default async function Downloads({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
-  const { locale } = await params;
-  const localeTyped = locale as Locale;
-  const dict = await getDictionary(localeTyped);
+  const locale = params.locale as Locale;
+  const dict = await getDictionary(locale);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
@@ -74,27 +73,19 @@ export default async function Downloads({
               <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span className="text-gray-300">
-                    {dict.features.liveStreaming.title}
-                  </span>
+                  <span className="text-gray-300">{dict.features.liveStreaming.title}</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span className="text-gray-300">
-                    {dict.features.mobileOptimized.title}
-                  </span>
+                  <span className="text-gray-300">{dict.features.mobileOptimized.title}</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span className="text-gray-300">
-                    {dict.features.realTimeUpdates.title}
-                  </span>
+                  <span className="text-gray-300">{dict.features.realTimeUpdates.title}</span>
                 </div>
                 <div className="flex items-center">
                   <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span className="text-gray-300">
-                    {dict.features.globalCoverage.title}
-                  </span>
+                  <span className="text-gray-300">{dict.features.globalCoverage.title}</span>
                 </div>
               </div>
 
@@ -246,11 +237,12 @@ export default async function Downloads({
               <div className="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center mb-6">
                 <PlayCircle className="h-8 w-8 text-green-500" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-4">
-                {dict.downloadsPage.ios} - HD Live Streaming
+              <h3 className="text-lg font-bold text-white mb-4">{dict.downloadsPage.ios}</h3>
+                HD Live Streaming
               </h3>
               <p className="text-gray-300">
-                {dict.features.liveStreaming.description}
+                Crystal clear HD streaming with zero buffering. Watch matches in
+                up to 4K quality on supported devices.
               </p>
             </div>
 

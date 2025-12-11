@@ -1,4 +1,4 @@
-// middleware.ts
+// proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import Negotiator from "negotiator";
@@ -12,7 +12,7 @@ function getLocale(request: NextRequest): string {
   return matchLocale(languages, locales as unknown as string[], defaultLocale);
 }
 
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip next internals, files, and APIs

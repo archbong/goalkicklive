@@ -100,6 +100,8 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  // Turbopack configuration for Next.js 16 compatibility
+  turbopack: {},
   // Compression and optimization
   compress: true,
   poweredByHeader: false,

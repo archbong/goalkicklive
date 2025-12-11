@@ -5,16 +5,19 @@ import MainLayout from "@/components/layout-components/MainLayout";
 import Script from "next/script";
 import "./globals.css";
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<
+  Array<{ locale: Locale }>
+> {
   return locales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const localeTyped = locale as Locale;
   const languages = Object.fromEntries(locales.map((l) => [l, `/${l}`]));
 
   console.log(`Generating metadata for locale: ${locale}`);
@@ -33,11 +36,12 @@ export default async function LocaleLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const localeTyped = locale as Locale;
 
-  if (!locales.includes(locale)) {
+  if (!locales.includes(localeTyped)) {
     // Handle invalid locales - redirect to default locale
     // For now, we'll just use the first locale as fallback
     const fallbackLocale = locales[0];
@@ -59,7 +63,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body>
-        <MainLayout locale={locale}>{children}</MainLayout>
+        <MainLayout locale={localeTyped}>{children}</MainLayout>
       </body>
     </html>
   );

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import { Button } from "@/components/ui/Button";
 import type { Locale } from "@/i18n/config";
 import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
 
 interface ContactPageProps {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }
 
 interface Translations {
@@ -27,6 +27,7 @@ interface Translations {
 }
 
 export default function Contact({ params }: ContactPageProps) {
+  const unwrappedParams = use(params);
   const [, setCurrentLocale] = useState<Locale>("en");
   const [translations, setTranslations] = useState<Translations | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -36,7 +37,7 @@ export default function Contact({ params }: ContactPageProps) {
   // Load locale and translations on client side
   useEffect(() => {
     const loadData = async () => {
-      const { locale: localeParam } = await params;
+      const localeParam = unwrappedParams.locale as Locale;
       setCurrentLocale(localeParam);
 
       // Dynamically import the translation file for the locale

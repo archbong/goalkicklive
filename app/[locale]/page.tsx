@@ -19,10 +19,11 @@ import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
 export default async function HomePage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const dict = await getDictionary(locale);
+  const localeTyped = locale as Locale;
+  const dict = await getDictionary(localeTyped);
 
   return (
     <>
@@ -51,19 +52,19 @@ export default async function HomePage({
               <div className="inline-flex items-center bg-green-600/20 border border-green-500/30 rounded-full px-4 py-2 mb-6">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                 <span className="text-sm font-medium">
-                  ⚽ LIVE MATCHES STREAMING NOW
+                  ⚽ {dict.hero.title}
                 </span>
               </div>
 
               <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-                Never Miss a
-                <span className="block text-green-500 mt-2">Goal Again</span>
+                {dict.hero.title}
+                <span className="block text-green-500 mt-2">
+                  {dict.hero.subtitle}
+                </span>
               </h1>
 
               <p className="text-xl mb-8 text-gray-300 max-w-2xl">
-                Stream every match live on your phone. Premier League, Champions
-                League, La Liga, and 50+ leagues worldwide. Crystal clear HD,
-                real-time stats, and never buffer during crucial moments.
+                {dict.hero.description}
               </p>
 
               {/* Live Match Ticker */}
@@ -71,7 +72,9 @@ export default async function HomePage({
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center">
                     <div className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
-                    <span className="text-sm font-medium">LIVE NOW</span>
+                    <span className="text-sm font-medium">
+                      {dict.common.watch} LIVE
+                    </span>
                   </div>
                   <span className="text-xs text-gray-400">67&apos;</span>
                 </div>
@@ -320,52 +323,56 @@ export default async function HomePage({
             {/* Match 1 - Live */}
             <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 hover:border-green-500/50 transition-all duration-300 group">
               <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
-                  <span className="text-sm font-medium">LIVE</span>
-                </div>
-                <span className="text-sm text-gray-400">67&apos;</span>
-              </div>
-              <div className="flex justify-between items-center mb-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-2xl font-bold">MU</span>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
+                    <span className="text-sm font-medium">
+                      {dict.common.watch} LIVE
+                    </span>
                   </div>
-                  <span className="font-medium">Man United</span>
+                  <span className="text-xs text-gray-400">67&apos;</span>
                 </div>
-                <div className="text-center">
-                  <div className="text-4xl font-bold mb-1">2 - 1</div>
-                  <div className="text-xs text-gray-400">Premier League</div>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-2xl font-bold">MC</span>
+                <div className="flex justify-between items-center mb-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-2xl font-bold">MU</span>
+                    </div>
+                    <span className="font-medium">Man United</span>
                   </div>
-                  <span className="font-medium">Man City</span>
+                  <div className="text-center">
+                    <div className="text-4xl font-bold mb-1">2 - 1</div>
+                    <div className="text-xs text-gray-400">Premier League</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-2xl font-bold">MC</span>
+                    </div>
+                    <span className="font-medium">Man City</span>
+                  </div>
                 </div>
+                <div className="space-y-2 mb-6">
+                  <div className="flex items-center text-sm">
+                    <span className="text-gray-400 mr-2">58&apos;</span>
+                    <span className="text-green-400">⚽ GOAL!</span>
+                    <span className="text-white ml-2">Fernandes</span>
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <span className="text-gray-400 mr-2">45+2&apos;</span>
+                    <span className="text-green-400">⚽ GOAL!</span>
+                    <span className="text-white ml-2">Haaland</span>
+                  </div>
+                </div>
+                <Link
+                  href={`/${locale}/downloads`}
+                  className="inline-flex items-center justify-center w-full rounded-md text-sm font-medium h-10 px-4 bg-red-600 text-white hover:bg-red-700 shadow-lg hover:shadow-xl transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 active:scale-[0.98]"
+                  data-track-download="true"
+                  data-track-platform="all"
+                  data-track-location="live_match_card"
+                >
+                  <PlayCircle className="mr-2 h-4 w-4" />
+                  WATCH LIVE
+                </Link>
               </div>
-              <div className="space-y-2 mb-6">
-                <div className="flex items-center text-sm">
-                  <span className="text-gray-400 mr-2">58&apos;</span>
-                  <span className="text-green-400">⚽ GOAL!</span>
-                  <span className="text-white ml-2">Fernandes</span>
-                </div>
-                <div className="flex items-center text-sm">
-                  <span className="text-gray-400 mr-2">45+2&apos;</span>
-                  <span className="text-green-400">⚽ GOAL!</span>
-                  <span className="text-white ml-2">Haaland</span>
-                </div>
-              </div>
-              <Link
-                href={`/${locale}/downloads`}
-                className="inline-flex items-center justify-center w-full rounded-md text-sm font-medium h-10 px-4 bg-red-600 text-white hover:bg-red-700 shadow-lg hover:shadow-xl transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 active:scale-[0.98]"
-                data-track-download="true"
-                data-track-platform="all"
-                data-track-location="live_match_card"
-              >
-                <PlayCircle className="mr-2 h-4 w-4" />
-                WATCH LIVE
-              </Link>
             </div>
 
             {/* Match 2 - Starting Soon */}

@@ -5,10 +5,11 @@ import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
 export default async function About({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const dict = await getDictionary(locale);
+  const localeTyped = locale as Locale;
+  const dict = await getDictionary(locale as Locale);
 
   return (
     <section className="bg-gray-50 py-16">
