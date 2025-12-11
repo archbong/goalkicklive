@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { locales, type Locale } from "@/i18n/config";
 import MainLayout from "@/components/layout-components/MainLayout";
+import Script from "next/script";
 import "./globals.css";
 
 export async function generateStaticParams() {
@@ -51,6 +52,12 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
+      <head>
+        <Script
+          src="/scripts/download-tracking.js"
+          strategy="afterInteractive"
+        />
+      </head>
       <body>
         <MainLayout locale={locale}>{children}</MainLayout>
       </body>

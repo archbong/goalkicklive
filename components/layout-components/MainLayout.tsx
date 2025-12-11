@@ -1,5 +1,6 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import MobileDownloadBanner from "./MobileDownloadBanner";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import type { Locale } from "@/i18n/config";
 
@@ -20,6 +21,7 @@ export default async function MainLayout({
       <Navbar locale={locale} translations={dict} />
       <main className="flex-1">{children}</main>
       <Footer locale={locale} translations={dict} />
+      <MobileDownloadBanner locale={locale} />
     </div>
   );
 }

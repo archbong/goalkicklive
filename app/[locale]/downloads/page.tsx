@@ -1,7 +1,22 @@
 import Image from "next/image";
-import Link from "next/link";
+
 import { Button } from "@/components/ui/Button";
-import { Apple, QrCode, Smartphone } from "lucide-react";
+import {
+  Apple,
+  PlayCircle,
+  Download,
+  Shield,
+  Globe,
+  Zap,
+  Check,
+  Star,
+  Users,
+  Trophy,
+  Clock,
+  Wifi,
+  Bell,
+  BarChart,
+} from "lucide-react";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import type { Locale } from "@/i18n/config";
 import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
@@ -12,244 +27,562 @@ export default async function Downloads({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  const dict = await getDictionary(locale);
+  await getDictionary(locale);
 
   return (
-    <section className="bg-gray-50 py-16">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
       {/* Top Banner Ad */}
       <TopBanner
         show={true}
+        closable={true}
+        closeButtonDelay={3}
         network="placeholder"
         responsive={true}
         maxWidth="1200px"
         margin="my-4"
       />
 
-      <div className="container mx-auto px-4 space-y-16">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-6">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
-            {dict.downloadsPage.title}
-          </h1>
-          <p className="text-gray-600 text-lg md:text-xl">
-            {dict.downloadsPage.description}
-          </p>
-        </div>
+      {/* Hero Download Section */}
+      <section className="pt-20 pb-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/patterns/football-field.svg')] opacity-5"></div>
+        <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-3xl"></div>
 
-        {/* Main Download Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* App Preview */}
-          <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-3xl blur-xl"></div>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <Image
-                src="/hero/app-mockup.png"
-                alt="Goalkick Live Mobile App"
-                width={400}
-                height={800}
-                className="object-contain w-full h-auto"
-              />
-            </div>
-          </div>
-
-          {/* Download Options */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-900">
-                {dict.downloadsPage.availableDevices}
-              </h2>
-              <p className="text-gray-600">
-                {dict.downloadsPage.availableDescription}
-              </p>
-            </div>
-
-            {/* App Store Buttons */}
-            <div className="space-y-6">
-              <Button
-                size="lg"
-                className="w-full bg-black text-white hover:bg-gray-900 px-8 py-4"
-              >
-                <Apple className="mr-3 h-6 w-6" />
-                <div className="text-left">
-                  <div className="text-sm">Download on the</div>
-                  <div className="text-lg font-bold">App Store</div>
-                </div>
-              </Button>
-
-              <Button
-                size="lg"
-                className="w-full bg-black text-white hover:bg-gray-900 px-8 py-4"
-              >
-                <Smartphone className="mr-3 h-6 w-6" />
-                <div className="text-left">
-                  <div className="text-sm">Get it on</div>
-                  <div className="text-lg font-bold">Google Play</div>
-                </div>
-              </Button>
-            </div>
-
-            {/* QR Code Section */}
-            <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
-              <div className="flex items-center gap-3">
-                <QrCode className="h-6 w-6 text-green-600" />
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {dict.downloadsPage.scanToDownload}
-                </h3>
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div>
+              <div className="inline-flex items-center bg-green-600/20 border border-green-500/30 rounded-full px-4 py-2 mb-6">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                <span className="text-sm font-medium">
+                  ⚡ DOWNLOAD NOW & WATCH FREE
+                </span>
               </div>
-              <p className="text-gray-600 text-sm">
-                {dict.downloadsPage.scanDescription}
+
+              <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                Watch Football
+                <span className="block text-green-500 mt-2">
+                  Anywhere, Anytime
+                </span>
+              </h1>
+
+              <p className="text-xl mb-8 text-gray-300 max-w-2xl">
+                Stream every match live on your phone. Premier League, Champions
+                League, La Liga, Bundesliga, Serie A, and 50+ leagues worldwide.
+                No cable required.
               </p>
-              <div className="flex justify-center p-4 bg-gray-100 rounded-lg">
-                <div className="w-48 h-48 bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center rounded-lg">
-                  <div className="text-center text-white">
-                    <QrCode className="h-32 w-32 mx-auto" />
-                    <p className="mt-2 text-sm font-medium">Goalkick Live</p>
+
+              {/* Key Benefits */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span className="text-gray-300">HD Live Streaming</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span className="text-gray-300">Zero Buffering</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span className="text-gray-300">Live Stats & Commentary</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span className="text-gray-300">Match Highlights</span>
+                </div>
+              </div>
+
+              {/* Download Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <Button
+                  size="lg"
+                  className="bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group"
+                  data-track-download="true"
+                  data-track-platform="ios"
+                  data-track-location="hero"
+                >
+                  <Apple className="mr-2 h-6 w-6" />
+                  <div className="text-left">
+                    <div className="text-xs">Download on the</div>
+                    <div className="text-lg font-bold">App Store</div>
+                  </div>
+                </Button>
+
+                <Button
+                  size="lg"
+                  className="bg-gray-800 hover:bg-gray-700 border border-gray-700 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group"
+                  data-track-download="true"
+                  data-track-platform="android"
+                  data-track-location="hero"
+                >
+                  <div className="w-6 h-6 mr-2">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.5,12.92 20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                    </svg>
+                  </div>
+                  <div className="text-left">
+                    <div className="text-xs">Get it on</div>
+                    <div className="text-lg font-bold">Google Play</div>
+                  </div>
+                </Button>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex items-center space-x-6 text-sm text-gray-400">
+                <div className="flex items-center">
+                  <Users className="w-4 h-4 mr-2" />
+                  <span>5M+ Football Fans</span>
+                </div>
+                <div className="flex items-center">
+                  <Star className="w-4 h-4 mr-2" />
+                  <span>4.8/5 Rating</span>
+                </div>
+                <div className="flex items-center">
+                  <Shield className="w-4 h-4 mr-2" />
+                  <span>Secure Streaming</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right - App Preview */}
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-r from-green-500/20 via-blue-500/20 to-purple-500/20 rounded-3xl blur-2xl"></div>
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-gray-800">
+                <div className="bg-black p-1">
+                  {/* Live Match Simulation */}
+                  <div className="bg-gray-900 rounded-t-2xl p-4">
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                        <span className="text-xs text-white">
+                          LIVE: UCL FINAL
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-400">23'</span>
+                    </div>
+
+                    <div className="flex justify-between items-center mb-6">
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-2">
+                          <span className="text-lg font-bold">RM</span>
+                        </div>
+                        <span className="text-sm text-white font-medium">
+                          Real Madrid
+                        </span>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-4xl font-bold text-white mb-1">
+                          1 - 0
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          Champions League
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-2">
+                          <span className="text-lg font-bold">MCI</span>
+                        </div>
+                        <span className="text-sm text-white font-medium">
+                          Man City
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Phone Frame */}
+                  <div className="relative">
+                    <Image
+                      src="/hero/app-mockup.png"
+                      alt="Goalkick Live Mobile App - Live Football Streaming"
+                      width={400}
+                      height={800}
+                      className="object-contain w-full h-auto"
+                      priority
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="bg-green-600/90 backdrop-blur-sm rounded-full p-4 animate-pulse">
+                        <PlayCircle className="h-12 w-12 text-white" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Badges */}
+              <div className="absolute -bottom-4 -left-4 bg-gray-900 border border-gray-800 rounded-xl p-3 shadow-xl">
+                <div className="flex items-center">
+                  <Zap className="w-5 h-5 text-green-500 mr-2" />
+                  <div>
+                    <div className="text-sm font-medium">Zero Buffer</div>
+                    <div className="text-xs text-gray-400">HD Quality</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Ad between App Preview and Features */}
-        <BetweenContentAd
-          index={1}
-          show={true}
-          network="placeholder"
-          responsive={true}
-          maxWidth="800px"
-        />
-
-        {/* Features Section */}
-        <div className="space-y-8">
-          <h2 className="text-3xl font-bold text-gray-900 text-center">
-            {dict.downloadsPage.appFeatures}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: "📺",
-                title: dict.features.liveStreaming.title,
-                description: dict.features.liveStreaming.description,
-              },
-              {
-                icon: "📱",
-                title: dict.features.mobileOptimized.title,
-                description: dict.features.mobileOptimized.description,
-              },
-              {
-                icon: "⚡",
-                title: dict.features.realTimeUpdates.title,
-                description: dict.features.realTimeUpdates.description,
-              },
-              {
-                icon: "🌍",
-                title: dict.features.globalCoverage.title,
-                description: dict.features.globalCoverage.description,
-              },
-            ].map((feature) => (
-              <div
-                key={feature.title}
-                className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow"
-              >
-                <div className="text-3xl mb-4">{feature.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Ad between Features and System Requirements */}
-        <BetweenContentAd
-          index={2}
-          show={true}
-          network="placeholder"
-          responsive={true}
-          maxWidth="800px"
-        />
-
-        {/* System Requirements */}
-        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8">
-          <div className="max-w-2xl mx-auto text-center space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              {dict.downloadsPage.systemRequirements}
+      {/* Why Choose Goalkick Live Section */}
+      <section id="features" className="py-20 bg-gray-900/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Everything a Football Fan Needs
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <Apple className="h-8 w-8 text-gray-700" />
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {dict.downloadsPage.ios}
-                  </h3>
-                </div>
-                <ul className="text-gray-600 space-y-2 text-left">
-                  <li>• iOS 12.0 or later</li>
-                  <li>• iPhone, iPad, or iPod touch</li>
-                  <li>• 100MB available storage</li>
-                  <li>• Internet connection required</li>
-                </ul>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Packed with features to enhance your football watching experience
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:border-green-500/50 transition-all duration-300">
+              <div className="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center mb-6">
+                <PlayCircle className="h-8 w-8 text-green-500" />
               </div>
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <Smartphone className="h-8 w-8 text-gray-700" />
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {dict.downloadsPage.android}
-                  </h3>
-                </div>
-                <ul className="text-gray-600 space-y-2 text-left">
-                  <li>• Android 8.0 or later</li>
-                  <li>• 100MB available storage</li>
-                  <li>• Internet connection required</li>
-                  <li>• Google Play Services</li>
-                </ul>
+              <h3 className="text-xl font-bold text-white mb-4">
+                HD Live Streaming
+              </h3>
+              <p className="text-gray-300">
+                Crystal clear HD streaming with zero buffering. Watch matches in
+                up to 4K quality on supported devices.
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:border-blue-500/50 transition-all duration-300">
+              <div className="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center mb-6">
+                <BarChart className="h-8 w-8 text-blue-500" />
               </div>
+              <h3 className="text-xl font-bold text-white mb-4">
+                Live Stats & Analysis
+              </h3>
+              <p className="text-gray-300">
+                Real-time stats, heatmaps, xG tracking, and expert analysis.
+                Know more than just the score.
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:border-purple-500/50 transition-all duration-300">
+              <div className="w-14 h-14 bg-purple-600/20 rounded-xl flex items-center justify-center mb-6">
+                <Bell className="h-8 w-8 text-purple-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">
+                Smart Notifications
+              </h3>
+              <p className="text-gray-300">
+                Get alerts for goals, red cards, match start, and team news.
+                Never miss important moments.
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:border-yellow-500/50 transition-all duration-300">
+              <div className="w-14 h-14 bg-yellow-600/20 rounded-xl flex items-center justify-center mb-6">
+                <Clock className="h-8 w-8 text-yellow-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">
+                Full Match Replays
+              </h3>
+              <p className="text-gray-300">
+                Missed a match? Watch full replays or 5-minute highlights.
+                Available 2 hours after final whistle.
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:border-red-500/50 transition-all duration-300">
+              <div className="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center mb-6">
+                <Wifi className="h-8 w-8 text-red-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">
+                Offline Viewing
+              </h3>
+              <p className="text-gray-300">
+                Download matches and watch offline. Perfect for commuting or
+                areas with poor internet.
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300">
+              <div className="w-14 h-14 bg-cyan-600/20 rounded-xl flex items-center justify-center mb-6">
+                <Trophy className="h-8 w-8 text-cyan-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">
+                Multiple Leagues
+              </h3>
+              <p className="text-gray-300">
+                One app for all football. Premier League, Champions League, La
+                Liga, Bundesliga, Serie A, and more.
+              </p>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Ad between System Requirements and Support */}
-        <BetweenContentAd
-          index={3}
-          show={true}
-          network="placeholder"
-          responsive={true}
-          maxWidth="800px"
-        />
+      {/* Ad between sections */}
+      <BetweenContentAd
+        index={1}
+        show={true}
+        closable={true}
+        network="placeholder"
+        responsive={true}
+        maxWidth="800px"
+        margin="my-8"
+      />
 
-        {/* Support Section */}
-        <div className="text-center space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {dict.downloadsPage.needHelp}
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            {dict.downloadsPage.helpDescription}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="default" className="px-8">
-              <Link href={`/${locale}/contact`}>
-                {dict.downloadsPage.contactSupport}
-              </Link>
-            </Button>
-            <Button variant="secondary" className="px-8">
-              <Link href={`/${locale}/about`}>
-                {dict.downloadsPage.learnMore}
-              </Link>
+      {/* Leagues Coverage Section */}
+      <section className="py-20 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Watch Every League, Every Match
+            </h2>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              We cover more leagues than any other streaming service
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
+            {[
+              {
+                name: "Premier League",
+                color: "bg-purple-600/20",
+                border: "border-purple-500/30",
+              },
+              {
+                name: "Champions League",
+                color: "bg-blue-600/20",
+                border: "border-blue-500/30",
+              },
+              {
+                name: "La Liga",
+                color: "bg-red-600/20",
+                border: "border-red-500/30",
+              },
+              {
+                name: "Bundesliga",
+                color: "bg-green-600/20",
+                border: "border-green-500/30",
+              },
+              {
+                name: "Serie A",
+                color: "bg-cyan-600/20",
+                border: "border-cyan-500/30",
+              },
+              {
+                name: "Ligue 1",
+                color: "bg-yellow-600/20",
+                border: "border-yellow-500/30",
+              },
+            ].map((league, index) => (
+              <div
+                key={index}
+                className={`${league.color} ${league.border} border rounded-2xl p-6 text-center hover:scale-105 transition-transform duration-300`}
+              >
+                <div className="text-2xl mb-2">🏆</div>
+                <h3 className="font-bold text-white">{league.name}</h3>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <p className="text-gray-300 mb-8">
+              Plus 50+ more leagues including Europa League, Conference League,
+              FA Cup, Copa del Rey, MLS, Brasileirão, and more
+            </p>
+            <Button
+              size="lg"
+              className="bg-green-600 hover:bg-green-700 shadow-lg"
+              data-track-download="true"
+              data-track-platform="all"
+              data-track-location="leagues_section"
+            >
+              <Download className="mr-2 h-5 w-5" />
+              DOWNLOAD TO WATCH ALL LEAGUES
             </Button>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Social Proof Section */}
+      <section className="py-20 bg-gray-900/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Trusted by Millions of Football Fans
+            </h2>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              See what our users are saying about their streaming experience
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-8">
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-xl">⚽</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-white">Alex M.</h4>
+                  <div className="flex text-yellow-400">
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-300 italic">
+                &quot;Finally an app that doesn&apos;t buffer during crucial
+                moments! Watched the entire Champions League final in perfect HD
+                on my commute."
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-8">
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-xl">📱</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-white">Sarah K.</h4>
+                  <div className="flex text-yellow-400">
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-300 italic">
+                &quot;The live stats and commentary make me feel like I have my
+                own personal analyst. Never going back to regular TV
+                streaming!&quot;
+              </p>
+            </div>
+
+            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-8">
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 bg-purple-600/20 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-xl">🌍</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-white">James L.</h4>
+                  <div className="flex text-yellow-400">
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                    <Star className="w-4 h-4 fill-current" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-300 italic">
+                &quot;As an expat, this is a game-changer. I can watch my home
+                team&apos;s matches live, no matter where I am in the
+                world.&quot;
+              </p>
+            </div>
+          </div>
+
+          {/* App Store Badges */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-8">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">4.8/5</div>
+              <div className="flex justify-center text-yellow-400 mb-2">
+                <Star className="w-5 h-5 fill-current" />
+                <Star className="w-5 h-5 fill-current" />
+                <Star className="w-5 h-5 fill-current" />
+                <Star className="w-5 h-5 fill-current" />
+                <Star className="w-5 h-5 fill-current" />
+              </div>
+              <p className="text-gray-300">App Store Rating</p>
+            </div>
+
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">5M+</div>
+              <p className="text-gray-300">Downloads Worldwide</p>
+            </div>
+
+            <div className="text-center">
+              <div className="text-4xl font-bold text-white mb-2">99.2%</div>
+              <p className="text-gray-300">Streaming Uptime</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-green-900/30 via-black to-blue-900/30">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+            Ready to Watch Football Like Never Before?
+          </h2>
+          <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+            Download now and get 7 days free trial. Cancel anytime.
+          </p>
+
+          <div className="flex flex-col sm:flex-row justify-center gap-6 mb-12">
+            <Button
+              size="lg"
+              className="bg-white text-black hover:bg-gray-100 shadow-2xl transform hover:-translate-y-1 transition-all duration-300 group"
+              data-track-download="true"
+              data-track-platform="ios"
+              data-track-location="final_cta"
+            >
+              <Apple className="mr-3 h-7 w-7" />
+              <div className="text-left">
+                <div className="text-xs">Download on the</div>
+                <div className="text-xl font-bold">App Store</div>
+              </div>
+            </Button>
+
+            <Button
+              size="lg"
+              className="bg-gray-900 text-white hover:bg-gray-800 border border-gray-700 shadow-2xl transform hover:-translate-y-1 transition-all duration-300 group"
+              data-track-download="true"
+              data-track-platform="android"
+              data-track-location="final_cta"
+            >
+              <div className="w-7 h-7 mr-3">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.5,12.92 20.16,13.19L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                </svg>
+              </div>
+              <div className="text-left">
+                <div className="text-xs">Get it on</div>
+                <div className="text-xl font-bold">Google Play</div>
+              </div>
+            </Button>
+          </div>
+
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-8 text-sm text-gray-400">
+            <div className="flex items-center">
+              <Shield className="w-4 h-4 mr-2" />
+              <span>Secure & Private</span>
+            </div>
+            <div className="flex items-center">
+              <Zap className="w-4 h-4 mr-2" />
+              <span>No Credit Card Required for Trial</span>
+            </div>
+            <div className="flex items-center">
+              <Globe className="w-4 h-4 mr-2" />
+              <span>Available in 150+ Countries</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Bottom Banner Ad */}
       <BottomBanner
         show={true}
+        closable={true}
+        closeButtonDelay={5}
+        showCloseLabel={true}
         network="placeholder"
         responsive={true}
         maxWidth="1200px"
         margin="my-8"
       />
-    </section>
+    </div>
   );
 }
