@@ -54,7 +54,7 @@ export default function OptimizedCTA({
     // Get user and session IDs from tracking system
     const getTrackingIds = () => {
       if (typeof window !== "undefined") {
-        const tracking = (window as any).GoalkickTracking;
+        const tracking = window.GoalkickTracking;
         if (tracking) {
           return {
             userId: tracking.getUserId() || "anonymous",
@@ -120,11 +120,8 @@ export default function OptimizedCTA({
     });
 
     // Also track with main tracking system
-    if (typeof window !== "undefined" && (window as any).GoalkickTracking) {
-      (window as any).GoalkickTracking.trackDownloadClick(
-        "all",
-        PAGE_SECTIONS[section],
-      );
+    if (typeof window !== "undefined" && window.GoalkickTracking) {
+      window.GoalkickTracking.trackDownloadClick("all", PAGE_SECTIONS[section]);
     }
   };
 
@@ -241,7 +238,7 @@ export default function OptimizedCTA({
     return (
       <div className={`inline-block ${fullWidth ? "w-full" : ""}`}>
         <Button
-          size={size}
+          size={size === "md" ? "default" : size === "xl" ? "lg" : size}
           className={`${getButtonColorClasses(defaultColor, variant)} ${className} ${fullWidth ? "w-full" : ""} opacity-50`}
           disabled
         >
@@ -255,31 +252,35 @@ export default function OptimizedCTA({
   }
 
   const finalVariant =
-    sectionOptimizations.buttonPosition === "sticky" ? "gradient" : variant;
-  const finalColor = sectionOptimizations.buttonColor || optimizedColor;
+    sectionOptimizations.buttonPosition === "sticky"
+      ? "gradient"
+      : typeof variant === "string"
+        ? variant
+        : "default";
+  const finalColor =
+    typeof sectionOptimizations.buttonColor === "string"
+      ? sectionOptimizations.buttonColor
+      : optimizedColor;
 
   return (
     <div className={`inline-block ${fullWidth ? "w-full" : ""}`}>
       <div className="relative">
         {getUrgencyBadge()}
-        <Button
-          size={size}
-          className={`${getButtonColorClasses(finalColor, finalVariant)} ${getButtonSizeClasses(size)} ${className} ${fullWidth ? "w-full" : ""}`}
+        <Link
+          href={`/${locale}/downloads`}
+          className={`${getButtonColorClasses(finalColor as string, finalVariant as string)} ${getButtonSizeClasses(size)} ${className} ${fullWidth ? "w-full" : ""} inline-flex items-center justify-center rounded-md font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.98]`}
           onClick={handleClick}
           data-track-download="true"
           data-track-platform="all"
           data-track-location={PAGE_SECTIONS[section]}
           data-ab-test="download-cta-2024-q1"
           data-ab-variant="optimized"
-          asChild
         >
-          <Link href={`/${locale}/downloads`}>
-            <div className="flex items-center justify-center">
-              {getIcon()}
-              <span className="font-bold">{optimizedText}</span>
-            </div>
-          </Link>
-        </Button>
+          <div className="flex items-center justify-center">
+            {getIcon()}
+            <span className="font-bold">{optimizedText}</span>
+          </div>
+        </Link>
       </div>
       {getValueProp()}
       {getSocialProof()}

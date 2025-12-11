@@ -73,7 +73,7 @@ export default async function HomePage({
                     <div className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
                     <span className="text-sm font-medium">LIVE NOW</span>
                   </div>
-                  <span className="text-xs text-gray-400">67'</span>
+                  <span className="text-xs text-gray-400">67&apos;</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -160,7 +160,7 @@ export default async function HomePage({
                         <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
                         <span className="text-xs text-white">LIVE</span>
                       </div>
-                      <span className="text-xs text-gray-400">67'</span>
+                      <span className="text-xs text-gray-400">67&apos;</span>
                     </div>
 
                     {/* Match Score */}
@@ -220,14 +220,14 @@ export default async function HomePage({
                     {/* Recent Events */}
                     <div className="space-y-2">
                       <div className="flex items-center text-xs">
-                        <span className="text-gray-400 mr-2">58'</span>
+                        <span className="text-gray-400 mr-2">58&apos;</span>
                         <span className="text-green-400">⚽ GOAL!</span>
                         <span className="text-white ml-2">
                           Fernandes (Man United)
                         </span>
                       </div>
                       <div className="flex items-center text-xs">
-                        <span className="text-gray-400 mr-2">45+2'</span>
+                        <span className="text-gray-400 mr-2">45+2&apos;</span>
                         <span className="text-green-400">⚽ GOAL!</span>
                         <span className="text-white ml-2">
                           Haaland (Man City)
@@ -304,19 +304,16 @@ export default async function HomePage({
                 Watch these matches right now on our mobile app
               </p>
             </div>
-            <Button
-              size="lg"
-              className="bg-red-600 hover:bg-red-700 mt-4 md:mt-0 shadow-lg hover:shadow-xl"
+            <Link
+              href={`/${locale}/downloads`}
+              className="inline-flex items-center justify-center rounded-md text-lg font-medium h-12 px-6 bg-red-600 text-white hover:bg-red-700 mt-4 md:mt-0 shadow-lg hover:shadow-xl transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 active:scale-[0.98]"
               data-track-download="true"
               data-track-platform="all"
               data-track-location="live_matches_header"
-              asChild
             >
-              <Link href={`/${locale}/downloads`}>
-                <PlayCircle className="mr-2 h-5 w-5" />
-                WATCH LIVE NOW
-              </Link>
-            </Button>
+              <PlayCircle className="mr-2 h-5 w-5" />
+              WATCH LIVE NOW
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -327,7 +324,7 @@ export default async function HomePage({
                   <div className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></div>
                   <span className="text-sm font-medium">LIVE</span>
                 </div>
-                <span className="text-sm text-gray-400">67'</span>
+                <span className="text-sm text-gray-400">67&apos;</span>
               </div>
               <div className="flex justify-between items-center mb-6">
                 <div className="text-center">
@@ -349,28 +346,26 @@ export default async function HomePage({
               </div>
               <div className="space-y-2 mb-6">
                 <div className="flex items-center text-sm">
-                  <span className="text-gray-400 mr-2">58'</span>
+                  <span className="text-gray-400 mr-2">58&apos;</span>
                   <span className="text-green-400">⚽ GOAL!</span>
                   <span className="text-white ml-2">Fernandes</span>
                 </div>
                 <div className="flex items-center text-sm">
-                  <span className="text-gray-400 mr-2">45+2'</span>
+                  <span className="text-gray-400 mr-2">45+2&apos;</span>
                   <span className="text-green-400">⚽ GOAL!</span>
                   <span className="text-white ml-2">Haaland</span>
                 </div>
               </div>
-              <Button
-                className="w-full bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl"
+              <Link
+                href={`/${locale}/downloads`}
+                className="inline-flex items-center justify-center w-full rounded-md text-sm font-medium h-10 px-4 bg-red-600 text-white hover:bg-red-700 shadow-lg hover:shadow-xl transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500 active:scale-[0.98]"
                 data-track-download="true"
                 data-track-platform="all"
                 data-track-location="live_match_card"
-                asChild
               >
-                <Link href={`/${locale}/downloads`}>
-                  <PlayCircle className="mr-2 h-4 w-4" />
-                  <span className="font-bold">WATCH LIVE</span>
-                </Link>
-              </Button>
+                <PlayCircle className="mr-2 h-4 w-4" />
+                WATCH LIVE
+              </Link>
             </div>
 
             {/* Match 2 - Starting Soon */}
@@ -411,18 +406,16 @@ export default async function HomePage({
                   Quarter Final - 2nd Leg
                 </div>
               </div>
-              <Button
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl"
+              <Link
+                href={`/${locale}/downloads`}
+                className="inline-flex items-center justify-center w-full rounded-md text-sm font-medium h-10 px-4 bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 active:scale-[0.98]"
                 data-track-download="true"
                 data-track-platform="all"
                 data-track-location="upcoming_match_card"
-                asChild
               >
-                <Link href={`/${locale}/downloads`}>
-                  <Bell className="mr-2 h-4 w-4" />
-                  <span className="font-bold">GET NOTIFIED</span>
-                </Link>
-              </Button>
+                <Bell className="mr-2 h-4 w-4" />
+                SET REMINDER
+              </Link>
             </div>
 
             {/* Match 3 - Recent Result */}
@@ -466,18 +459,16 @@ export default async function HomePage({
                   <span className="font-medium">6 - 3</span>
                 </div>
               </div>
-              <Button
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl"
+              <Link
+                href={`/${locale}/downloads`}
+                className="inline-flex items-center justify-center w-full rounded-md text-sm font-medium h-10 px-4 bg-purple-600 text-white hover:bg-purple-700 shadow-lg hover:shadow-xl transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-500 active:scale-[0.98]"
                 data-track-download="true"
                 data-track-platform="all"
                 data-track-location="completed_match_card"
-                asChild
               >
-                <Link href={`/${locale}/downloads`}>
-                  <PlayCircle className="mr-2 h-4 w-4" />
-                  <span className="font-bold">WATCH HIGHLIGHTS</span>
-                </Link>
-              </Button>
+                <PlayCircle className="mr-2 h-4 w-4" />
+                WATCH HIGHLIGHTS
+              </Link>
             </div>
           </div>
 
@@ -545,7 +536,7 @@ export default async function HomePage({
                   Download App
                 </h3>
                 <p className="text-gray-300 text-center">
-                  Get the app from App Store or Google Play. It's free to
+                  Get the app from App Store or Google Play. It&apos;s free to
                   download.
                 </p>
               </div>
@@ -589,19 +580,16 @@ export default async function HomePage({
           </div>
 
           <div className="text-center">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 shadow-2xl hover:shadow-3xl"
+            <Link
+              href={`/${locale}/downloads`}
+              className="inline-flex items-center justify-center rounded-md text-lg font-medium h-12 px-6 bg-gradient-to-r from-green-600 to-blue-600 text-white hover:from-green-700 hover:to-blue-700 shadow-2xl hover:shadow-3xl transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500 active:scale-[0.98]"
               data-track-download="true"
               data-track-platform="all"
               data-track-location="how_it_works"
-              asChild
             >
-              <Link href={`/${locale}/downloads`}>
-                <PlayCircle className="mr-2 h-5 w-5" />
-                <span className="font-bold">START WATCHING FREE</span>
-              </Link>
-            </Button>
+              <Download className="mr-2 h-5 w-5" />
+              DOWNLOAD & WATCH FREE
+            </Link>
           </div>
         </Container>
       </section>
@@ -640,7 +628,7 @@ export default async function HomePage({
                 <p className="text-gray-600">
                   Absolutely! With our premium subscription, you can download
                   full matches and highlights to watch offline. Perfect for
-                  commuting or when you're in areas with poor internet
+                  commuting or when you&apos;re in areas with poor internet
                   connection.
                 </p>
               </div>
@@ -679,19 +667,16 @@ export default async function HomePage({
               </div>
 
               <div className="text-center mt-10">
-                <Button
-                  size="lg"
-                  className="bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl"
+                <Link
+                  href={`/${locale}/downloads`}
+                  className="inline-flex items-center justify-center rounded-md text-lg font-medium h-12 px-6 bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500 active:scale-[0.98]"
                   data-track-download="true"
                   data-track-platform="all"
                   data-track-location="faq"
-                  asChild
                 >
-                  <Link href={`/${locale}/downloads`}>
-                    <Download className="mr-2 h-5 w-5" />
-                    <span className="font-bold">GET THE APP</span>
-                  </Link>
-                </Button>
+                  <Download className="mr-2 h-5 w-5" />
+                  DOWNLOAD NOW
+                </Link>
               </div>
             </div>
           </div>
@@ -720,7 +705,7 @@ export default async function HomePage({
               </h3>
               <p className="text-gray-600">
                 Watch matches in crystal clear HD with zero buffering.
-                Experience every goal, save, and tackle like you're in the
+                Experience every goal, save, and tackle like you&apos;re in the
                 stadium.
               </p>
             </div>

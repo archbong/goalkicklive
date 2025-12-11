@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { X, Download, Smartphone } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 
 interface MobileDownloadBannerProps {
   locale: string;
 }
 
-export default function MobileDownloadBanner({ locale }: MobileDownloadBannerProps) {
+export default function MobileDownloadBanner({
+  locale,
+}: MobileDownloadBannerProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isClosed, setIsClosed] = useState(false);
 
@@ -58,7 +59,9 @@ export default function MobileDownloadBanner({ locale }: MobileDownloadBannerPro
                 <Smartphone className="h-6 w-6" />
               </div>
               <div className="flex-1">
-                <div className="font-bold text-sm">Watch Football on Mobile</div>
+                <div className="font-bold text-sm">
+                  Watch Football on Mobile
+                </div>
                 <div className="text-xs opacity-90">
                   Download app for best streaming experience
                 </div>
@@ -66,17 +69,14 @@ export default function MobileDownloadBanner({ locale }: MobileDownloadBannerPro
             </div>
 
             <div className="flex items-center space-x-2">
-              <Button
-                size="sm"
-                className="bg-white text-green-700 hover:bg-gray-100 font-bold shadow-lg"
+              <Link
+                href={`/${locale}/downloads`}
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 bg-white text-green-700 hover:bg-gray-100 font-bold shadow-lg transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.98]"
                 onClick={handleDownloadClick}
-                asChild
               >
-                <Link href={`/${locale}/downloads`}>
-                  <Download className="h-4 w-4 mr-1" />
-                  GET APP
-                </Link>
-              </Button>
+                <Download className="h-4 w-4 mr-1" />
+                GET APP
+              </Link>
 
               <button
                 onClick={handleClose}

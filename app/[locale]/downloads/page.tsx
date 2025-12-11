@@ -157,7 +157,7 @@ export default async function Downloads({
                           LIVE: UCL FINAL
                         </span>
                       </div>
-                      <span className="text-xs text-gray-400">23'</span>
+                      <span className="text-xs text-gray-400">23&apos;</span>
                     </div>
 
                     <div className="flex justify-between items-center mb-6">
@@ -433,7 +433,7 @@ export default async function Downloads({
               <p className="text-gray-300 italic">
                 &quot;Finally an app that doesn&apos;t buffer during crucial
                 moments! Watched the entire Champions League final in perfect HD
-                on my commute."
+                on my commute.&quot;
               </p>
             </div>
 
