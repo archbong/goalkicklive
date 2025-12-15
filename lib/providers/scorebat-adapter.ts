@@ -216,6 +216,95 @@ export class ScorebatAdapter implements VideoProvider {
       embedHtml = video.embed as string;
     }
 
+    // Fix common issues with Scorebat embed HTML
+    if (embedHtml) {
+      // Debug: Log original embed HTML
+      console.log(`Scorebat adapter: Original embed HTML for item ${index}:`);
+      console.log(`Embed length: ${embedHtml.length} characters`);
+
+      // Check if it's actually HTML or something else
+      if (embedHtml.includes("<iframe") || embedHtml.includes("<IFRAME")) {
+        console.log("Embed HTML contains iframe tag - processing as HTML");
+
+        // Try to extract iframe src for debugging and fixing
+        const iframeMatch = embedHtml.match(/<iframe[^>]*src="([^"]+)"[^>]*>/i);
+        if (iframeMatch) {
+          const src = iframeMatch[1];
+          console.log(`Extracted iframe src: ${src}`);
+
+          // Fix: Check if src is missing protocol/domain (common Scorebat issue)
+          if (
+            !src.startsWith("http://") &&
+            !src.startsWith("https://") &&
+            !src.startsWith("data:") &&
+            !src.startsWith("/") &&
+            src.includes("=") // Likely base64 with query params
+          ) {
+            console.log("Fixing iframe src - adding Scorebat domain...");
+
+            // Scorebat embed URLs typically follow this pattern:
+            // https://www.scorebat.com/embed/{base64_video_id}/?token=...
+            // But sometimes they provide just the base64 part without domain
+            const fixedSrc = `https://www.scorebat.com/embed/${src}`;
+
+            // Replace the src in the embed HTML
+            embedHtml = embedHtml.replace(/src="[^"]+"/i, `src="${fixedSrc}"`);
+            console.log(`Fixed src: ${fixedSrc.substring(0, 80)}...`);
+          }
+
+          // Ensure iframe has proper attributes
+          if (
+            !embedHtml.includes(" width=") &&
+            !embedHtml.includes(' width="')
+          ) {
+            embedHtml = embedHtml.replace(/<iframe/i, '<iframe width="100%"');
+          }
+          if (
+            !embedHtml.includes(" height=") &&
+            !embedHtml.includes(' height="')
+          ) {
+            embedHtml = embedHtml.replace(/<iframe/i, '<iframe height="100%"');
+          }
+          if (
+            !embedHtml.includes(" frameborder=") &&
+            !embedHtml.includes(' frameborder="')
+          ) {
+            embedHtml = embedHtml.replace(
+              /<iframe/i,
+              '<iframe frameborder="0"',
+            );
+          }
+          if (
+            !embedHtml.includes(" allowfullscreen") &&
+            !embedHtml.includes(' allowfullscreen="')
+          ) {
+            embedHtml = embedHtml.replace(
+              /<iframe/i,
+              "<iframe allowfullscreen",
+            );
+          }
+        } else {
+          console.log("No iframe src found in embed HTML");
+        }
+      } else {
+        console.log(
+          "Embed HTML does not contain iframe tag - converting to iframe",
+        );
+
+        // Scorebat provides URLs like: base64string/?token=...
+        // We need to convert these to proper iframe HTML
+        // Based on console logs, Scorebat iframes load from: https://www.scorebat.com/base64string/?token=...
+        // NOT from: https://www.scorebat.com/embed/base64string/?token=...
+        const fixedSrc = `https://www.scorebat.com/${embedHtml}`;
+        embedHtml = `<iframe src="${fixedSrc}" width="100%" height="100%" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+        console.log(
+          `Converted to iframe with src: ${fixedSrc.substring(0, 80)}...`,
+        );
+      }
+    } else {
+      console.log(`Scorebat adapter: No embed HTML found for item ${index}`);
+    }
+
     return {
       id: `scorebat_${(itemObj.title as string)?.replace(/\s+/g, "_").toLowerCase()}_${index}`,
       title: (itemObj.title as string) || `${teams.home} vs ${teams.away}`,
@@ -348,25 +437,11 @@ export class ScorebatAdapter implements VideoProvider {
     ) {
       const video = itemObj.videos[0] as Record<string, unknown>;
       if (video.video) return video.video as string;
-      // Also check for embed URL in iframe src
-      if (video.embed && typeof video.embed === "string") {
-        const embedHtml = video.embed as string;
-        const iframeMatch = embedHtml.match(/src="([^"]+)"/);
-        if (iframeMatch && iframeMatch[1]) {
-          return iframeMatch[1];
-        }
-      }
+      // Don't extract embed URLs as video URLs - they're not direct video files
     }
 
-    // Check if embed contains a URL
-    if (itemObj.embed && typeof itemObj.embed === "string") {
-      const embedHtml = itemObj.embed as string;
-      // Try to extract URL from iframe src
-      const iframeMatch = embedHtml.match(/src="([^"]+)"/);
-      if (iframeMatch && iframeMatch[1]) {
-        return iframeMatch[1];
-      }
-    }
+    // Don't extract embed URLs as video URLs - they're not direct video files
+    // Scorebat provides embed HTML, not direct video URLs
 
     return "";
   }

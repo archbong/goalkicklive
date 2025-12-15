@@ -40,6 +40,7 @@ export default function VideoModal({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [videoError, setVideoError] = useState(false);
 
   // Handle escape key to close modal
   useEffect(() => {
@@ -67,8 +68,84 @@ export default function VideoModal({
 
   // Determine what to render in the video player
   const renderVideoContent = () => {
+    if (videoError) {
+      return (
+        <div className="w-full aspect-video bg-gradient-to-br from-gray-900 to-black flex flex-col items-center justify-center rounded-lg">
+          <div className="text-center p-8">
+            <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.998-.833-2.732 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                ></path>
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-white mb-2">
+              Video Playback Failed
+            </h3>
+            <p className="text-gray-400 mb-4">
+              The video could not be loaded. This is often caused by:
+            </p>
+            <ul className="text-gray-500 text-sm text-left max-w-md mx-auto mb-6">
+              <li className="mb-2">
+                • Ad blocker interfering with the video player
+              </li>
+              <li className="mb-2">
+                • Browser restrictions on embedded content
+              </li>
+              <li className="mb-2">• Network or connectivity issues</li>
+              <li>• Temporary service interruption from the video provider</li>
+            </ul>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => {
+                  setVideoError(false);
+                  setIsLoading(true);
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Try Again
+              </button>
+              <button
+                onClick={() => {
+                  // Try to extract URL from embed HTML
+                  if (embedHtml) {
+                    const iframeMatch = embedHtml.match(/src="([^"]+)"/);
+                    if (iframeMatch && iframeMatch[1]) {
+                      window.open(iframeMatch[1], "_blank");
+                    }
+                  } else if (videoUrl) {
+                    window.open(videoUrl, "_blank");
+                  }
+                }}
+                className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Open in New Tab
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     if (embedHtml) {
-      return <VideoPlayer embedHtml={embedHtml} />;
+      return (
+        <VideoPlayer
+          embedHtml={embedHtml}
+          onError={() => {
+            setVideoError(true);
+            setIsLoading(false);
+          }}
+        />
+      );
     }
 
     if (videoUrl) {
@@ -107,8 +184,14 @@ export default function VideoModal({
             controls
             autoPlay
             muted={isMuted}
-            onLoadedData={() => setIsLoading(false)}
-            onError={() => setIsLoading(false)}
+            onLoadedData={() => {
+              setIsLoading(false);
+              setVideoError(false);
+            }}
+            onError={() => {
+              setIsLoading(false);
+              setVideoError(true);
+            }}
           >
             <source src={videoUrl} type="video/mp4" />
             Your browser does not support the video tag.
@@ -127,9 +210,12 @@ export default function VideoModal({
           <h3 className="text-xl font-semibold text-white mb-2">
             Video Unavailable
           </h3>
-          <p className="text-gray-400">
+          <p className="text-gray-400 mb-4">
             This highlight video is currently not available.
           </p>
+          <div className="text-sm text-gray-500">
+            <p>No embed HTML or video URL provided.</p>
+          </div>
         </div>
       </div>
     );
@@ -233,17 +319,20 @@ export default function VideoModal({
 
         {/* Video Content */}
         <div className="relative">
-          {isLoading && (
+          {isLoading && !videoError && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-900 z-10">
               <div className="text-center">
                 <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                 <p className="text-gray-300">Loading video...</p>
+                <p className="text-gray-500 text-sm mt-2">
+                  If this takes too long, try disabling your ad blocker
+                </p>
               </div>
             </div>
           )}
 
           <div
-            className={`${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-300`}
+            className={`${isLoading && !videoError ? "opacity-0" : "opacity-100"} transition-opacity duration-300`}
           >
             {renderVideoContent()}
           </div>
