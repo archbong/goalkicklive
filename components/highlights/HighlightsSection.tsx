@@ -19,6 +19,12 @@ interface HighlightsSectionProps {
   background?: "light" | "dark" | "gradient" | "transparent";
   showFilters?: boolean;
   showStats?: boolean;
+  initialHighlights?: UnifiedHighlight[];
+  initialStats?: {
+    totalCompetitions?: number;
+    totalTeams?: number;
+    totalHighlights?: number;
+  };
 }
 
 export async function HighlightsSection({
@@ -35,62 +41,80 @@ export async function HighlightsSection({
   background = "light",
   showFilters = false,
   showStats = true,
+  initialHighlights,
+  initialStats,
 }: HighlightsSectionProps) {
   // Initialize highlights service
   const highlightsService = getHighlightsService();
 
-  let highlights: UnifiedHighlight[] = [];
+  let highlights: UnifiedHighlight[] = initialHighlights || [];
   let stats = null;
 
   try {
-    // Fetch highlights based on variant
-    switch (variant) {
-      case "featured":
-        highlights = await highlightsService.getFeaturedHighlights(limit);
-        break;
-      case "recent":
-        highlights = await highlightsService.getRecentHighlights(limit);
-        break;
-      case "live":
-        highlights = await highlightsService.getLiveMatches();
-        if (limit > 0) {
-          highlights = highlights.slice(0, limit);
-        }
-        break;
-      case "competition":
-        if (competition) {
-          highlights =
-            await highlightsService.getHighlightsByCompetition(competition);
+    // Only fetch from API if initial data is not provided
+    if (!initialHighlights || initialHighlights.length === 0) {
+      // Fetch highlights based on variant
+      switch (variant) {
+        case "featured":
+          highlights = await highlightsService.getFeaturedHighlights(limit);
+          break;
+        case "recent":
+          highlights = await highlightsService.getRecentHighlights(limit);
+          break;
+        case "live":
+          highlights = await highlightsService.getLiveMatches();
           if (limit > 0) {
             highlights = highlights.slice(0, limit);
           }
-        }
-        break;
-      default:
-        const response = await highlightsService.getHighlights({
-          page: 1,
-          pageSize: limit,
-        });
-        highlights = response.highlights;
-        break;
+          break;
+        case "competition":
+          if (competition) {
+            highlights =
+              await highlightsService.getHighlightsByCompetition(competition);
+            if (limit > 0) {
+              highlights = highlights.slice(0, limit);
+            }
+          }
+          break;
+        default:
+          const response = await highlightsService.getHighlights({
+            page: 1,
+            pageSize: limit,
+          });
+          highlights = response.highlights;
+          break;
+      }
+    } else {
+      // Use initial highlights and apply limit
+      if (limit > 0 && highlights.length > limit) {
+        highlights = highlights.slice(0, limit);
+      }
     }
 
     // Get stats if requested
     if (showStats) {
-      try {
-        const [competitions, teams, allHighlights] = await Promise.all([
-          highlightsService.getCompetitions(),
-          highlightsService.getTeams(),
-          highlightsService.getHighlights({ pageSize: 1 }),
-        ]);
-
+      if (initialStats) {
         stats = {
-          totalCompetitions: competitions.length,
-          totalTeams: teams.length,
-          totalHighlights: allHighlights.totalCount,
+          totalCompetitions: initialStats.totalCompetitions || 0,
+          totalTeams: initialStats.totalTeams || 0,
+          totalHighlights: initialStats.totalHighlights || 0,
         };
-      } catch (error) {
-        console.error("Failed to fetch stats:", error);
+      } else {
+        try {
+          const [competitions, teams, allHighlights] = await Promise.all([
+            highlightsService.getCompetitions(),
+            highlightsService.getTeams(),
+            highlightsService.getHighlights({ pageSize: 1 }),
+          ]);
+
+          stats = {
+            totalCompetitions: competitions.length,
+            totalTeams: teams.length,
+            totalHighlights: allHighlights.totalCount,
+          };
+        } catch (error) {
+          console.error("Failed to fetch stats:", error);
+        }
       }
     }
   } catch (error) {

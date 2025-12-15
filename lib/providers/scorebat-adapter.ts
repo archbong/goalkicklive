@@ -21,12 +21,23 @@ export class ScorebatAdapter implements VideoProvider {
     try {
       console.log("Fetching highlights from Scorebat API...");
 
-      // Try multiple Scorebat API endpoints
+      // Try multiple Scorebat API endpoints based on documentation
       const endpoints = [
-        `${this.baseUrl}/feed/?token=${this.apiKey}`,
-        `${this.baseUrl}/feed/?token=${this.apiKey}&page=1`,
-        `${this.baseUrl}/feed/`,
-      ];
+        // Team-specific endpoint if team filter is provided
+        filters?.team
+          ? `${this.baseUrl}/team/${this.normalizeTeamId(filters.team)}/?token=${this.apiKey}`
+          : null,
+        // Competition-specific endpoint if competition filter is provided
+        filters?.competition
+          ? `${this.baseUrl}/competition/${this.normalizeCompetitionId(filters.competition)}/?token=${this.apiKey}`
+          : null,
+        // Free feed for free tier (as documented)
+        `${this.baseUrl}/free-feed/?token=${this.apiKey}`,
+        // Featured feed for paid plans (most comprehensive)
+        `${this.baseUrl}/featured-feed/?token=${this.apiKey}`,
+        // Live streams endpoint for live matches
+        `${this.baseUrl}/live-streams/?token=${this.apiKey}`,
+      ].filter(Boolean) as string[];
 
       let data: unknown = null;
       let lastError: Error | null = null;
@@ -193,6 +204,18 @@ export class ScorebatAdapter implements VideoProvider {
 
     const itemObj = item as Record<string, unknown>;
 
+    // Extract embed HTML from videos array if available
+    let embedHtml = itemObj.embed as string;
+    if (
+      !embedHtml &&
+      itemObj.videos &&
+      Array.isArray(itemObj.videos) &&
+      itemObj.videos[0]
+    ) {
+      const video = itemObj.videos[0] as Record<string, unknown>;
+      embedHtml = video.embed as string;
+    }
+
     return {
       id: `scorebat_${(itemObj.title as string)?.replace(/\s+/g, "_").toLowerCase()}_${index}`,
       title: (itemObj.title as string) || `${teams.home} vs ${teams.away}`,
@@ -201,9 +224,9 @@ export class ScorebatAdapter implements VideoProvider {
       thumbnailUrl:
         (itemObj.thumbnail as string) ||
         this.extractThumbnail(item) ||
-        "/images/default-thumbnail.jpg",
+        "https://placehold.co/600x400/1a1a1a/ffffff?text=Football+Highlights",
       videoUrl: this.extractVideoUrl(item),
-      embedUrl: itemObj.embed as string,
+      embedUrl: embedHtml,
       duration,
       competition:
         (itemObj.competition as { name: string })?.name ||
@@ -311,8 +334,12 @@ export class ScorebatAdapter implements VideoProvider {
   private extractVideoUrl(item: unknown): string {
     // Extract the best available video URL
     const itemObj = item as Record<string, unknown>;
+
+    // Check for direct video URL
     if (itemObj.videoUrl) return itemObj.videoUrl as string;
     if (itemObj.url) return itemObj.url as string;
+
+    // Check for videos array
     if (
       itemObj.videos &&
       Array.isArray(itemObj.videos) &&
@@ -321,7 +348,26 @@ export class ScorebatAdapter implements VideoProvider {
     ) {
       const video = itemObj.videos[0] as Record<string, unknown>;
       if (video.video) return video.video as string;
+      // Also check for embed URL in iframe src
+      if (video.embed && typeof video.embed === "string") {
+        const embedHtml = video.embed as string;
+        const iframeMatch = embedHtml.match(/src="([^"]+)"/);
+        if (iframeMatch && iframeMatch[1]) {
+          return iframeMatch[1];
+        }
+      }
     }
+
+    // Check if embed contains a URL
+    if (itemObj.embed && typeof itemObj.embed === "string") {
+      const embedHtml = itemObj.embed as string;
+      // Try to extract URL from iframe src
+      const iframeMatch = embedHtml.match(/src="([^"]+)"/);
+      if (iframeMatch && iframeMatch[1]) {
+        return iframeMatch[1];
+      }
+    }
+
     return "";
   }
 
@@ -519,5 +565,110 @@ export class ScorebatAdapter implements VideoProvider {
       console.error("Scorebat recent highlights API failed:", error);
       return this.getHighlights();
     }
+  }
+
+  /**
+   * Normalize competition name to Scorebat API format
+   * Converts competition names to lowercase with hyphens
+   * Example: "Premier League" -> "england-premier-league"
+   */
+  private normalizeCompetitionId(competition: string): string {
+    const competitionMap: Record<string, string> = {
+      // Premier League
+      "premier league": "england-premier-league",
+      "english premier league": "england-premier-league",
+      epl: "england-premier-league",
+
+      // Serie A
+      "serie a": "italy-serie-a",
+      "italian serie a": "italy-serie-a",
+
+      // La Liga
+      "la liga": "spain-la-liga",
+      "spanish la liga": "spain-la-liga",
+
+      // Bundesliga
+      bundesliga: "germany-bundesliga",
+      "german bundesliga": "germany-bundesliga",
+
+      // Ligue 1
+      "ligue 1": "france-ligue-1",
+      "french ligue 1": "france-ligue-1",
+
+      // Champions League
+      "champions league": "uefa-champions-league",
+      "uefa champions league": "uefa-champions-league",
+
+      // Europa League
+      "europa league": "uefa-europa-league",
+      "uefa europa league": "uefa-europa-league",
+
+      // Conference League
+      "conference league": "uefa-conference-league",
+      "uefa conference league": "uefa-conference-league",
+    };
+
+    const normalized = competition.toLowerCase().trim();
+
+    // Return mapped competition ID or convert to URL-friendly format
+    if (competitionMap[normalized]) {
+      return competitionMap[normalized];
+    }
+
+    // Convert to URL-friendly format: lowercase, replace spaces with hyphens
+    return normalized
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/--+/g, "-")
+      .replace(/^-|-$/g, "");
+  }
+
+  /**
+   * Normalize team name to Scorebat API format
+   * Converts team names to lowercase with hyphens
+   * Example: "Real Madrid" -> "real-madrid"
+   */
+  private normalizeTeamId(team: string): string {
+    const teamMap: Record<string, string> = {
+      // Premier League teams
+      arsenal: "arsenal",
+      chelsea: "chelsea",
+      liverpool: "liverpool",
+      "manchester city": "manchester-city",
+      "manchester united": "manchester-united",
+      tottenham: "tottenham-hotspur",
+
+      // La Liga teams
+      "real madrid": "real-madrid",
+      barcelona: "barcelona",
+      "atletico madrid": "atletico-madrid",
+
+      // Serie A teams
+      juventus: "juventus",
+      "ac milan": "ac-milan",
+      "inter milan": "inter-milan",
+
+      // Bundesliga teams
+      "bayern munich": "bayern-munich",
+      "borussia dortmund": "borussia-dortmund",
+
+      // Other popular teams
+      psg: "paris-saint-germain",
+      "paris saint germain": "paris-saint-germain",
+    };
+
+    const normalized = team.toLowerCase().trim();
+
+    // Return mapped team ID or convert to URL-friendly format
+    if (teamMap[normalized]) {
+      return teamMap[normalized];
+    }
+
+    // Convert to URL-friendly format: lowercase, replace spaces with hyphens
+    return normalized
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/--+/g, "-")
+      .replace(/^-|-$/g, "");
   }
 }

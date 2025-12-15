@@ -153,8 +153,8 @@ export default function AdBanner({
     }
   };
 
-  // Generate slot ID based on position and format
-  const slotId = `ad-banner-${position}-${format}-${Date.now()}`;
+  // Generate stable slot ID based on position and format
+  const slotId = `ad-banner-${position}-${format}`;
 
   // Get appropriate format based on position and screen size
   const getAdFormat = (): AdFormat => {

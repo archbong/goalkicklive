@@ -11,10 +11,22 @@ import {
   Star,
   ExternalLink,
   Bell,
+  Trophy,
+  Users,
 } from "lucide-react";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import type { Locale } from "@/i18n/config";
 import { TopBanner, BetweenContentAd, BottomBanner } from "@/components/ads";
+import {
+  LiveMatchesSection,
+  RecentHighlightsSection,
+} from "@/components/highlights/HighlightsSection";
+import { StatsSection } from "@/components/highlights/StatsSection";
+import { CompetitionsList } from "@/components/highlights/CompetitionsList";
+import { TeamsList } from "@/components/highlights/TeamsList";
+import { getHighlightsService } from "@/lib/services/highlights.service";
+
+export const dynamic = "force-dynamic";
 
 export default async function HomePage({
   params,
@@ -22,6 +34,34 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const dictionary = await getDictionary(locale as Locale);
+
+  // Initialize highlights service and fetch all data once
+  const highlightsService = getHighlightsService();
+
+  // Fetch all data in parallel to minimize API calls
+  const [highlightsResponse, competitions, teams, liveMatches] =
+    await Promise.allSettled([
+      highlightsService.getHighlights({ pageSize: 50 }),
+      highlightsService.getCompetitions(),
+      highlightsService.getTeams(),
+      highlightsService.getLiveMatches(),
+    ]);
+
+  // Extract data from promises
+  const highlights =
+    highlightsResponse.status === "fulfilled"
+      ? highlightsResponse.value.highlights
+      : [];
+  const totalHighlights =
+    highlightsResponse.status === "fulfilled"
+      ? highlightsResponse.value.totalCount
+      : 0;
+  const competitionsData =
+    competitions.status === "fulfilled" ? competitions.value : [];
+  const teamsData = teams.status === "fulfilled" ? teams.value : [];
+  const liveMatchesData =
+    liveMatches.status === "fulfilled" ? liveMatches.value : [];
   const localeTyped = locale as Locale;
   const dict = await getDictionary(localeTyped);
 
@@ -112,9 +152,6 @@ export default async function HomePage({
                         </span>
                       </Link>
                     </Button>
-                    <div className="mt-2 text-center text-sm text-green-300">
-                      7-day free trial • No credit card required
-                    </div>
                   </div>
                 </div>
                 <Button
@@ -476,6 +513,13 @@ export default async function HomePage({
                 <PlayCircle className="mr-2 h-4 w-4" />
                 WATCH HIGHLIGHTS
               </Link>
+              <Link
+                href={`/${locale}/highlights`}
+                className="inline-flex items-center px-6 py-3 bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-lg transition-colors font-semibold"
+              >
+                <Trophy className="mr-2 h-4 w-4" />
+                BROWSE ALL MATCHES
+              </Link>
             </div>
           </div>
 
@@ -667,9 +711,8 @@ export default async function HomePage({
                   Can I watch on multiple devices?
                 </h3>
                 <p className="text-gray-600">
-                  Yes! With a premium subscription, you can stream on up to 3
-                  devices simultaneously. Watch on your phone, tablet, and
-                  computer at the same time.
+                  Yes! Watch on your phone, tablet, and computer at the same
+                  time.
                 </p>
               </div>
 
@@ -958,73 +1001,167 @@ export default async function HomePage({
         margin="my-8"
       />
 
-      {/* Closable Ad Feature Demo Section */}
-      <section className="py-12 bg-gray-50">
-        <Container>
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">
-              New Feature: Closable Ads
-            </h2>
-            <p className="text-xl text-gray-600 mb-6">
-              We&apos;ve improved our ad experience! Now users can close ads
-              they find annoying.
-            </p>
+      {/* Live Matches Section */}
+      <LiveMatchesSection
+        limit={3}
+        title="Live Matches"
+        description="Watch matches happening right now with real-time updates"
+        viewAllHref={`/${locale}/highlights?filter=live`}
+        showViewAll={true}
+        columns={3}
+        initialHighlights={liveMatchesData.slice(0, 3)}
+      />
 
-            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="text-left flex-1">
-                  <h3 className="text-2xl font-semibold mb-3">Try it out</h3>
-                  <p className="text-gray-600 mb-4">
-                    The top banner on this page is now closable. Look for the X
-                    button in the top right corner!
+      {/* Stats Section */}
+      <StatsSection
+        initialLiveMatchesCount={liveMatchesData.length}
+        initialCompetitionsCount={competitionsData.length}
+        initialTeamsCount={teamsData.length}
+        initialHighlightsCount={totalHighlights}
+      />
+
+      {/* Recent Highlights Section */}
+      <RecentHighlightsSection
+        limit={6}
+        title="Recent Highlights"
+        description="Latest match highlights from around the world"
+        viewAllHref={`/${locale}/highlights?sort=recent`}
+        showViewAll={true}
+        columns={3}
+        background="light"
+        showStats={true}
+        initialHighlights={highlights.slice(0, 6)}
+        initialStats={{
+          totalCompetitions: competitionsData.length,
+          totalTeams: teamsData.length,
+          totalHighlights: totalHighlights,
+        }}
+      />
+
+      {/* Competitions and Teams Section */}
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Browse by Competition & Team
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Explore highlights from specific leagues or follow your favorite
+              teams
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Competitions List */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-600 rounded-lg">
+                  <Trophy className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Competitions
+                  </h3>
+                  <p className="text-gray-600">
+                    Browse by league or tournament
                   </p>
-                  <ul className="space-y-2 text-gray-600 mb-6">
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Click the X button to close annoying ads
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Close button appears after 3 seconds
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Works on all ad positions
-                    </li>
-                  </ul>
-                  <Link
-                    href={`/${locale}/examples/ads`}
-                    className="inline-flex items-center text-green-600 hover:text-green-700 font-medium"
+                </div>
+              </div>
+
+              <CompetitionsList
+                limit={12}
+                initialCompetitions={competitionsData.slice(0, 12)}
+              />
+
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <Link
+                  href={`/${locale}/highlights`}
+                  className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  View all competitions
+                  <svg
+                    className="w-4 h-4 ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    View more examples
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </Link>
-                </div>
-                <div className="flex-1">
-                  <div className="bg-gray-100 rounded-lg p-4 border border-gray-200">
-                    <div className="text-sm text-gray-500 mb-2">
-                      Example Code:
-                    </div>
-                    <pre className="bg-gray-800 text-white p-4 rounded text-sm overflow-x-auto">
-                      {`<TopBanner
-  closable={true}
-  closeButtonDelay={3}
-  showCloseLabel={true}
-  onClose={() => {
-    // Track when users close ads
-    analytics.track(&apos;ad_closed&apos;);
-  }}
-/>`}
-                    </pre>
-                  </div>
-                </div>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    ></path>
+                  </svg>
+                </Link>
               </div>
             </div>
 
-            <p className="text-gray-500 text-sm">
-              We&apos;re committed to improving user experience while supporting
-              our free service.
-            </p>
+            {/* Teams List */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="inline-flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-lg">
+                  <Users className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Teams</h3>
+                  <p className="text-gray-600">Follow your favorite clubs</p>
+                </div>
+              </div>
+
+              <TeamsList limit={15} initialTeams={teamsData.slice(0, 15)} />
+
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <Link
+                  href={`/${locale}/highlights`}
+                  className="inline-flex items-center text-green-600 hover:text-green-800 font-medium"
+                >
+                  View all teams
+                  <svg
+                    className="w-4 h-4 ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    ></path>
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Bar */}
+      <section className="py-16 bg-gradient-to-b from-gray-900 to-black text-white">
+        <Container>
+          <div className="max-w-6xl mx-auto">
+            <div className="mt-12 bg-gray-800/30 border border-gray-700 rounded-xl p-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-400">127</div>
+                  <div className="text-sm text-gray-400">Live Matches</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-400">2.1M</div>
+                  <div className="text-sm text-gray-400">Active Viewers</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-yellow-400">48</div>
+                  <div className="text-sm text-gray-400">Leagues Covered</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-purple-400">4K</div>
+                  <div className="text-sm text-gray-400">HD Streams</div>
+                </div>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

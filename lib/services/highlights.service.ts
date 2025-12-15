@@ -31,6 +31,9 @@ export class HighlightsService {
   private cache: Map<string, { data: any; timestamp: number }> = new Map();
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache
 
+  // Track in-flight requests to prevent duplicate API calls
+  private pendingRequests: Map<string, Promise<any>> = new Map();
+
   constructor(scorebatApiKey?: string) {
     // Initialize adapter with API key from environment variables
     const apiKey = scorebatApiKey || process.env.SCOREBAT_API_KEY || "";
@@ -48,56 +51,78 @@ export class HighlightsService {
       return cached as HighlightsResponse;
     }
 
+    // Check if there's already a pending request for this cache key
+    const pendingRequest = this.pendingRequests.get(cacheKey);
+    if (pendingRequest) {
+      return pendingRequest as Promise<HighlightsResponse>;
+    }
+
     try {
-      // Add timeout to API call (10 seconds max)
-      const scorebatHighlights = await withTimeout(
-        this.scorebatAdapter.getHighlights(filters),
-        10000,
-      );
+      // Create a new promise for this request
+      const requestPromise = (async () => {
+        // Add timeout to API call (10 seconds max)
+        const scorebatHighlights = await withTimeout(
+          this.scorebatAdapter.getHighlights(filters),
+          10000,
+        );
 
-      const highlights: UnifiedHighlight[] = scorebatHighlights || [];
-      const scorebatCount = highlights.length;
+        const highlights: UnifiedHighlight[] = scorebatHighlights || [];
+        const scorebatCount = highlights.length;
 
-      console.log(
-        `Retrieved ${highlights.length} highlights from Scorebat API`,
-      );
-      // Apply additional filtering
-      const filteredHighlights = this.applyFilters(highlights, filters);
+        console.log(
+          `Retrieved ${highlights.length} highlights from Scorebat API`,
+        );
+        // Apply additional filtering
+        const filteredHighlights = this.applyFilters(highlights, filters);
 
-      // Sort by date (newest first)
-      filteredHighlights.sort(
-        (a, b) => b.matchDate.getTime() - a.matchDate.getTime(),
-      );
+        // Sort by date (newest first)
+        filteredHighlights.sort(
+          (a, b) => b.matchDate.getTime() - a.matchDate.getTime(),
+        );
 
-      // Pagination
-      const page = filters?.page || 1;
-      const pageSize = filters?.pageSize || 20;
-      const startIndex = (page - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      const paginatedHighlights = filteredHighlights.slice(
-        startIndex,
-        endIndex,
-      );
+        // Pagination
+        const page = filters?.page || 1;
+        const pageSize = filters?.pageSize || 20;
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedHighlights = filteredHighlights.slice(
+          startIndex,
+          endIndex,
+        );
 
-      const response: HighlightsResponse = {
-        highlights: paginatedHighlights,
-        totalCount: filteredHighlights.length,
-        page,
-        pageSize,
-        hasMore: endIndex < filteredHighlights.length,
-        providers: {
-          scorebat: scorebatCount,
-          supersport: supersportCount,
-        },
-      };
+        const response: HighlightsResponse = {
+          highlights: paginatedHighlights,
+          totalCount: filteredHighlights.length,
+          page,
+          pageSize,
+          hasMore: endIndex < filteredHighlights.length,
+          providers: {
+            scorebat: scorebatCount,
+          },
+        };
 
-      this.setCache(cacheKey, response);
-      return response;
+        this.setCache(cacheKey, response);
+        return response;
+      })();
+
+      // Store the promise in pending requests
+      this.pendingRequests.set(cacheKey, requestPromise);
+
+      try {
+        const result = await requestPromise;
+        return result;
+      } finally {
+        // Remove from pending requests once completed
+        this.clearPendingRequest(cacheKey);
+      }
     } catch (error) {
       console.error(
         "Failed to get highlights:",
         error instanceof Error ? error.message : error,
       );
+
+      // Clear pending request on error
+      this.clearPendingRequest(cacheKey);
 
       // Return empty response instead of throwing to prevent page crashes
       return {
@@ -108,7 +133,6 @@ export class HighlightsService {
         hasMore: false,
         providers: {
           scorebat: 0,
-          supersport: 0,
         },
       };
     }
@@ -126,21 +150,40 @@ export class HighlightsService {
     }
 
     try {
-      const highlights = await withTimeout(this.getHighlights(), 5000); // 5 second timeout for live matches
-      const now = new Date();
-      const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+      // Check if there's already a pending request for live matches
+      const pendingRequest = this.pendingRequests.get(cacheKey);
+      if (pendingRequest) {
+        return pendingRequest as Promise<UnifiedHighlight[]>;
+      }
 
-      const liveMatches = highlights.highlights.filter(
-        (highlight) => highlight.matchDate > oneHourAgo,
-      );
+      // Create a new promise for live matches request
+      const requestPromise = (async () => {
+        const highlights = await this.getHighlights(); // getHighlights() already has its own timeout
+        const now = new Date();
+        const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
 
-      this.setCache(cacheKey, liveMatches, 60 * 1000); // 1 minute cache for live matches
-      return liveMatches;
+        const liveMatches = highlights.highlights.filter(
+          (highlight) => highlight.matchDate > oneHourAgo,
+        );
+
+        this.setCache(cacheKey, liveMatches);
+        return liveMatches;
+      })();
+
+      // Store the promise in pending requests
+      this.pendingRequests.set(cacheKey, requestPromise);
+
+      try {
+        const result = await requestPromise;
+        return result;
+      } finally {
+        // Remove from pending requests once completed
+        this.clearPendingRequest(cacheKey);
+      }
     } catch (error) {
-      console.error(
-        "Failed to get live matches:",
-        error instanceof Error ? error.message : error,
-      );
+      console.error("Failed to get live matches:", error);
+      // Clear pending request on error
+      this.clearPendingRequest(cacheKey);
       return [];
     }
   }
@@ -239,27 +282,83 @@ export class HighlightsService {
     }
 
     try {
-      const highlights = await withTimeout(this.getHighlights(), 5000);
-      const competitions = new Set<string>();
+      // Use a dedicated cache for competitions to avoid calling getHighlights() multiple times
+      // Check if there's already a pending request for competitions
+      const pendingRequest = this.pendingRequests.get(cacheKey);
+      if (pendingRequest) {
+        return pendingRequest as Promise<string[]>;
+      }
 
-      highlights.highlights.forEach((highlight) => {
-        if (
-          highlight.competition &&
-          highlight.competition !== "Unknown Competition"
-        ) {
-          competitions.add(highlight.competition);
+      // Create a new promise for competitions request
+      const requestPromise = (async () => {
+        // Get highlights with a larger page size to extract more competitions
+        const highlights = await this.getHighlights({ pageSize: 100 });
+        const competitions = new Set<string>();
+
+        highlights.highlights.forEach((highlight) => {
+          if (
+            highlight.competition &&
+            highlight.competition !== "Unknown Competition"
+          ) {
+            competitions.add(highlight.competition);
+          }
+        });
+
+        // If we got competitions from API, cache and return them
+        if (competitions.size > 0) {
+          const sortedCompetitions = Array.from(competitions).sort();
+          this.setCache(cacheKey, sortedCompetitions);
+          return sortedCompetitions;
         }
-      });
 
-      const sortedCompetitions = Array.from(competitions).sort();
-      this.setCache(cacheKey, sortedCompetitions);
-      return sortedCompetitions;
+        // Fallback to default competitions if API returns empty
+        const defaultCompetitions = [
+          "Premier League",
+          "La Liga",
+          "Serie A",
+          "Bundesliga",
+          "Ligue 1",
+          "Champions League",
+          "Europa League",
+          "FA Cup",
+          "Copa del Rey",
+          "Coppa Italia",
+        ];
+
+        this.setCache(cacheKey, defaultCompetitions);
+        return defaultCompetitions;
+      })();
+
+      // Store the promise in pending requests
+      this.pendingRequests.set(cacheKey, requestPromise);
+
+      try {
+        const result = await requestPromise;
+        return result;
+      } finally {
+        // Remove from pending requests once completed
+        this.clearPendingRequest(cacheKey);
+      }
     } catch (error) {
-      console.error(
-        "Failed to get competitions:",
+      console.warn(
+        "Failed to get competitions from API, using fallback:",
         error instanceof Error ? error.message : error,
       );
-      return [];
+
+      // Clear pending request on error
+      this.clearPendingRequest(cacheKey);
+
+      // Return fallback competitions on error
+      const fallbackCompetitions = [
+        "Premier League",
+        "La Liga",
+        "Serie A",
+        "Bundesliga",
+        "Ligue 1",
+      ];
+
+      this.setCache(cacheKey, fallbackCompetitions);
+      return fallbackCompetitions;
     }
   }
 
@@ -275,27 +374,91 @@ export class HighlightsService {
     }
 
     try {
-      const highlights = await withTimeout(this.getHighlights(), 5000);
-      const teams = new Set<string>();
+      // Use a dedicated cache for teams to avoid calling getHighlights() multiple times
+      // Check if there's already a pending request for teams
+      const pendingRequest = this.pendingRequests.get(cacheKey);
+      if (pendingRequest) {
+        return pendingRequest as Promise<string[]>;
+      }
 
-      highlights.highlights.forEach((highlight) => {
-        if (highlight.teams.home && highlight.teams.home !== "Home Team") {
-          teams.add(highlight.teams.home);
-        }
-        if (highlight.teams.away && highlight.teams.away !== "Away Team") {
-          teams.add(highlight.teams.away);
-        }
-      });
+      // Create a new promise for teams request
+      const requestPromise = (async () => {
+        // Get highlights with a larger page size to extract more teams
+        const highlights = await this.getHighlights({ pageSize: 100 });
+        const teams = new Set<string>();
 
-      const sortedTeams = Array.from(teams).sort();
-      this.setCache(cacheKey, sortedTeams);
-      return sortedTeams;
+        highlights.highlights.forEach((highlight) => {
+          if (highlight.teams.home && highlight.teams.home !== "Home Team") {
+            teams.add(highlight.teams.home);
+          }
+          if (highlight.teams.away && highlight.teams.away !== "Away Team") {
+            teams.add(highlight.teams.away);
+          }
+        });
+
+        // If we got teams from API, cache and return them
+        if (teams.size > 0) {
+          const sortedTeams = Array.from(teams).sort();
+          this.setCache(cacheKey, sortedTeams);
+          return sortedTeams;
+        }
+
+        // Fallback to default teams if API returns empty
+        const defaultTeams = [
+          "Arsenal",
+          "Chelsea",
+          "Liverpool",
+          "Manchester City",
+          "Manchester United",
+          "Tottenham",
+          "Real Madrid",
+          "Barcelona",
+          "Atletico Madrid",
+          "Bayern Munich",
+          "Borussia Dortmund",
+          "Juventus",
+          "AC Milan",
+          "Inter Milan",
+          "Paris Saint-Germain",
+        ];
+
+        this.setCache(cacheKey, defaultTeams);
+        return defaultTeams;
+      })();
+
+      // Store the promise in pending requests
+      this.pendingRequests.set(cacheKey, requestPromise);
+
+      try {
+        const result = await requestPromise;
+        return result;
+      } finally {
+        // Remove from pending requests once completed
+        this.clearPendingRequest(cacheKey);
+      }
     } catch (error) {
-      console.error(
-        "Failed to get teams:",
+      console.warn(
+        "Failed to get teams from API, using fallback:",
         error instanceof Error ? error.message : error,
       );
-      return [];
+
+      // Clear pending request on error
+      this.clearPendingRequest(cacheKey);
+
+      // Return fallback teams on error
+      const fallbackTeams = [
+        "Arsenal",
+        "Chelsea",
+        "Liverpool",
+        "Manchester City",
+        "Real Madrid",
+        "Barcelona",
+        "Bayern Munich",
+        "Juventus",
+      ];
+
+      this.setCache(cacheKey, fallbackTeams);
+      return fallbackTeams;
     }
   }
 
@@ -342,11 +505,6 @@ export class HighlightsService {
             id: "scorebat",
             name: "Scorebat",
             count: highlights.providers.scorebat,
-          },
-          {
-            id: "supersport",
-            name: "Supersport",
-            count: highlights.providers.supersport,
           },
         ],
       };
@@ -519,11 +677,17 @@ export class HighlightsService {
     return null;
   }
 
+  private clearPendingRequest(key: string): void {
+    this.pendingRequests.delete(key);
+  }
+
   private setCache(key: string, data: any, ttl?: number): void {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
     });
+    // Clear any pending request for this key since we now have cached data
+    this.clearPendingRequest(key);
   }
 
   private extractCountryFromCompetition(competition: string): string | null {

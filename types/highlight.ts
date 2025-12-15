@@ -47,7 +47,6 @@ export interface HighlightsResponse {
   pageSize: number;
   hasMore: boolean;
   providers: {
-    supersport: number;
     scorebat: number;
   };
 }

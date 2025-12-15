@@ -196,7 +196,7 @@ export default function AdSlot({
             data-ad-slot={googleAdSlot}
             data-ad-format={format === "fluid" ? "auto" : "rectangle"}
             data-full-width-responsive={responsive ? "true" : "false"}
-            data-adtest={process.env.NODE_ENV === "development" ? "on" : "off"}
+            data-adtest="off"
           />
         );
 

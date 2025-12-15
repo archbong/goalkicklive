@@ -46,25 +46,20 @@ export default async function LocaleLayout({
     // For now, we'll just use the first locale as fallback
     const fallbackLocale = locales[0];
     return (
-      <html lang={fallbackLocale}>
-        <body>
-          <MainLayout locale={fallbackLocale}>{children}</MainLayout>
-        </body>
-      </html>
-    );
-  }
-
-  return (
-    <html lang={locale}>
-      <head>
+      <>
         <Script
           src="/scripts/download-tracking.js"
           strategy="afterInteractive"
         />
-      </head>
-      <body>
-        <MainLayout locale={localeTyped}>{children}</MainLayout>
-      </body>
-    </html>
+        <MainLayout locale={fallbackLocale}>{children}</MainLayout>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Script src="/scripts/download-tracking.js" strategy="afterInteractive" />
+      <MainLayout locale={localeTyped}>{children}</MainLayout>
+    </>
   );
 }
